@@ -1,0 +1,38 @@
+# Secrets
+.env
+.env.local
+!.env.example
+
+# Python
+backend/.venv/
+**/__pycache__/
+**/*.py[cod]
+**/*.egg-info/
+backend/*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# SQLite
+*.db
+*.sqlite
+*.sqlite3
+
+# Node
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+.env
+.venv/
+node_modules/
+__pycache__/
+*.db
+dist/
