@@ -1,0 +1,567 @@
+# Canonical catalogue. Every eval trade-off is true here.
+# "Today" is frozen at as_of. Sales expand to 120 days; forecasts to 56.
+#
+# Trade-off map
+#   SKU-COVERED     open PO already covers demand; rec of 800 is over-buying
+#   SKU-MOQ         true need ~320 vs MOQ 1000
+#   SKU-BUDGET      coffee budget remaining << cost of needed qty
+#   SKU-STORAGE     bulky cereal, DC-SOUTH cannot hold the recommended qty
+#   SKU-SPIKE       last-14d demand step-change vs stale forecast
+#   SKU-PROMO       single-day bulk/promo outlier, not a trend
+#   SKU-ALT         QuickShip is faster and dearer than Acme
+#   SKU-UNRELIABLE  primary is Bargain Cash & Carry (poor fill / reliability)
+#   SKU-HEALTHY     recommendation is actually right (accept case)
+
+world: base
+as_of: 2026-09-15
+random_seed: 42
+
+trade_offs:
+  covered_sku: SKU-COVERED
+  moq_sku: SKU-MOQ
+  budget_sku: SKU-BUDGET
+  storage_sku: SKU-STORAGE
+  spike_sku: SKU-SPIKE
+  promo_sku: SKU-PROMO
+  alternate_sku: SKU-ALT
+  unreliable_supplier: SUP-UNRELIABLE
+  healthy_sku: SKU-HEALTHY
+
+nodes:
+  - id: DC-NORTH
+    name: North Fulfilment Centre
+    storage_capacity_m3: 800.0
+    receiving_capacity_units_per_day: 8000
+  - id: DC-SOUTH
+    name: South Dark Store
+    storage_capacity_m3: 15.0
+    receiving_capacity_units_per_day: 400
+
+suppliers:
+  - id: SUP-RELIABLE
+    name: Acme Grocery Co
+    active: true
+    payment_terms_days: 45
+    reliability_score: 0.94
+    avg_lead_time_days: 8.0
+    lead_time_std_days: 1.2
+    fill_rate_pct: 97.5
+    on_time_pct: 96.0
+    api_behaviour: full_accept
+  - id: SUP-FAST
+    name: QuickShip Trading
+    active: true
+    payment_terms_days: 15
+    reliability_score: 0.86
+    avg_lead_time_days: 3.0
+    lead_time_std_days: 0.8
+    fill_rate_pct: 91.0
+    on_time_pct: 89.0
+    api_behaviour: full_accept
+  - id: SUP-UNRELIABLE
+    name: Bargain Cash & Carry
+    active: true
+    payment_terms_days: 7
+    reliability_score: 0.41
+    avg_lead_time_days: 11.0
+    lead_time_std_days: 6.0
+    fill_rate_pct: 58.0
+    on_time_pct: 52.0
+    api_behaviour: partial_accept
+    api_behaviour_params:
+      ratio: 0.5
+
+products:
+  - id: prod-covered
+    sku: SKU-COVERED
+    name: Still Water 500ml
+    category: beverages
+    unit_cost: 0.22
+    units_per_case: 24
+    volume_per_unit_m3: 0.0006
+    shelf_life_days: 180
+    abc_class: A
+  - id: prod-moq
+    sku: SKU-MOQ
+    name: Organic Oat Milk 1L
+    category: dairy
+    unit_cost: 1.40
+    units_per_case: 12
+    volume_per_unit_m3: 0.0012
+    shelf_life_days: 45
+    abc_class: B
+  - id: prod-budget
+    sku: SKU-BUDGET
+    name: Premium Coffee Beans 1kg
+    category: coffee
+    unit_cost: 14.00
+    units_per_case: 6
+    volume_per_unit_m3: 0.002
+    shelf_life_days: 365
+    abc_class: A
+  - id: prod-storage
+    sku: SKU-STORAGE
+    name: Family Cereal 750g
+    category: dry_goods
+    unit_cost: 2.80
+    units_per_case: 8
+    volume_per_unit_m3: 0.05
+    shelf_life_days: 270
+    abc_class: B
+  - id: prod-spike
+    sku: SKU-SPIKE
+    name: Isotonic Drink 500ml
+    category: beverages
+    unit_cost: 0.55
+    units_per_case: 24
+    volume_per_unit_m3: 0.0007
+    shelf_life_days: 120
+    abc_class: A
+  - id: prod-promo
+    sku: SKU-PROMO
+    name: Cola 330ml 24-pack
+    category: beverages
+    unit_cost: 6.50
+    units_per_case: 1
+    volume_per_unit_m3: 0.012
+    shelf_life_days: 150
+    abc_class: A
+  - id: prod-alt
+    sku: SKU-ALT
+    name: Basmati Rice 5kg
+    category: dry_goods
+    unit_cost: 3.80
+    units_per_case: 5
+    volume_per_unit_m3: 0.008
+    shelf_life_days: 365
+    abc_class: B
+  - id: prod-unreliable
+    sku: SKU-UNRELIABLE
+    name: Instant Noodles Carton
+    category: dry_goods
+    unit_cost: 0.40
+    units_per_case: 20
+    volume_per_unit_m3: 0.001
+    shelf_life_days: 365
+    abc_class: C
+  - id: prod-healthy
+    sku: SKU-HEALTHY
+    name: Plain Flour 1kg
+    category: dry_goods
+    unit_cost: 1.10
+    units_per_case: 10
+    volume_per_unit_m3: 0.0015
+    shelf_life_days: 240
+    abc_class: B
+
+supplier_products:
+  # Still water — covered by open PO
+  - supplier_id: SUP-RELIABLE
+    product_id: prod-covered
+    unit_price: 0.28
+    moq_units: 24
+    order_multiple_units: 24
+    lead_time_days: 7
+    is_primary: true
+    max_units_per_order: 5000
+  # Oat milk — MOQ 1000 vs ~320 need; QuickShip has a sane MOQ at a premium
+  - supplier_id: SUP-RELIABLE
+    product_id: prod-moq
+    unit_price: 1.55
+    moq_units: 1000
+    order_multiple_units: 50
+    lead_time_days: 14
+    is_primary: true
+    max_units_per_order: 5000
+  - supplier_id: SUP-FAST
+    product_id: prod-moq
+    unit_price: 2.10
+    moq_units: 80
+    order_multiple_units: 10
+    lead_time_days: 4
+    is_primary: false
+    max_units_per_order: 800
+  # Coffee — budget is the binding constraint
+  - supplier_id: SUP-RELIABLE
+    product_id: prod-budget
+    unit_price: 16.00
+    moq_units: 50
+    order_multiple_units: 10
+    lead_time_days: 10
+    is_primary: true
+    max_units_per_order: 2000
+  # Cereal — bulky, South node
+  - supplier_id: SUP-RELIABLE
+    product_id: prod-storage
+    unit_price: 3.10
+    moq_units: 24
+    order_multiple_units: 8
+    lead_time_days: 7
+    is_primary: true
+    max_units_per_order: 2000
+  - supplier_id: SUP-FAST
+    product_id: prod-storage
+    unit_price: 3.80
+    moq_units: 16
+    order_multiple_units: 8
+    lead_time_days: 3
+    is_primary: false
+    max_units_per_order: 400
+  # Isotonic — genuine spike
+  - supplier_id: SUP-RELIABLE
+    product_id: prod-spike
+    unit_price: 0.62
+    moq_units: 24
+    order_multiple_units: 24
+    lead_time_days: 7
+    is_primary: true
+    max_units_per_order: 4000
+  # Cola — promo spike
+  - supplier_id: SUP-RELIABLE
+    product_id: prod-promo
+    unit_price: 7.20
+    moq_units: 10
+    order_multiple_units: 5
+    lead_time_days: 7
+    is_primary: true
+    max_units_per_order: 2000
+  # Rice — viable alternate (dearer, faster)
+  - supplier_id: SUP-RELIABLE
+    product_id: prod-alt
+    unit_price: 4.00
+    moq_units: 50
+    order_multiple_units: 10
+    lead_time_days: 14
+    is_primary: true
+    max_units_per_order: 3000
+  - supplier_id: SUP-FAST
+    product_id: prod-alt
+    unit_price: 5.20
+    moq_units: 20
+    order_multiple_units: 10
+    lead_time_days: 3
+    is_primary: false
+    max_units_per_order: 800
+  # Noodles — unreliable primary, Acme as re-source
+  - supplier_id: SUP-UNRELIABLE
+    product_id: prod-unreliable
+    unit_price: 0.38
+    moq_units: 200
+    order_multiple_units: 20
+    lead_time_days: 9
+    is_primary: true
+    max_units_per_order: 4000
+  - supplier_id: SUP-RELIABLE
+    product_id: prod-unreliable
+    unit_price: 0.52
+    moq_units: 100
+    order_multiple_units: 20
+    lead_time_days: 7
+    is_primary: false
+    max_units_per_order: 4000
+  # Flour — healthy / accept case
+  - supplier_id: SUP-RELIABLE
+    product_id: prod-healthy
+    unit_price: 1.25
+    moq_units: 20
+    order_multiple_units: 20
+    lead_time_days: 7
+    is_primary: true
+    max_units_per_order: 2000
+
+inventory:
+  - product_id: prod-covered
+    node_id: DC-NORTH
+    on_hand: 180
+    reserved: 20
+    in_transit: 0
+    damaged: 0
+    last_counted_at: 2026-09-13T07:00:00
+  - product_id: prod-moq
+    node_id: DC-NORTH
+    on_hand: 48
+    reserved: 0
+    in_transit: 0
+    damaged: 0
+    last_counted_at: 2026-09-13T07:00:00
+  - product_id: prod-budget
+    node_id: DC-NORTH
+    on_hand: 50
+    reserved: 0
+    in_transit: 0
+    damaged: 0
+    last_counted_at: 2026-09-13T07:00:00
+  - product_id: prod-storage
+    node_id: DC-SOUTH
+    on_hand: 200
+    reserved: 0
+    in_transit: 0
+    damaged: 0
+    last_counted_at: 2026-09-12T07:00:00
+  - product_id: prod-spike
+    node_id: DC-NORTH
+    on_hand: 220
+    reserved: 10
+    in_transit: 0
+    damaged: 0
+    last_counted_at: 2026-09-13T07:00:00
+  - product_id: prod-promo
+    node_id: DC-NORTH
+    on_hand: 500
+    reserved: 0
+    in_transit: 0
+    damaged: 0
+    last_counted_at: 2026-09-13T07:00:00
+  - product_id: prod-alt
+    node_id: DC-NORTH
+    on_hand: 70
+    reserved: 0
+    in_transit: 0
+    damaged: 0
+    last_counted_at: 2026-09-13T07:00:00
+  - product_id: prod-unreliable
+    node_id: DC-NORTH
+    on_hand: 180
+    reserved: 0
+    in_transit: 0
+    damaged: 0
+    last_counted_at: 2026-09-13T07:00:00
+  - product_id: prod-healthy
+    node_id: DC-NORTH
+    on_hand: 40
+    reserved: 0
+    in_transit: 0
+    damaged: 0
+    last_counted_at: 2026-09-13T07:00:00
+
+sales_patterns:
+  - product_id: prod-covered
+    node_id: DC-NORTH
+    kind: stable
+    mean: 25
+    std: 3
+  - product_id: prod-moq
+    node_id: DC-NORTH
+    kind: stable
+    mean: 16
+    std: 2.2
+  - product_id: prod-budget
+    node_id: DC-NORTH
+    kind: stable
+    mean: 22
+    std: 2.5
+  - product_id: prod-storage
+    node_id: DC-SOUTH
+    kind: stable
+    mean: 22
+    std: 2.5
+  - product_id: prod-spike
+    node_id: DC-NORTH
+    kind: genuine_spike
+    mean: 18
+    std: 2.2
+    spike_mean: 48
+    spike_days: 14
+  - product_id: prod-promo
+    node_id: DC-NORTH
+    kind: promo_anomaly
+    mean: 24
+    std: 2.4
+    promo_day_offset: 7
+    promo_units: 560
+  - product_id: prod-alt
+    node_id: DC-NORTH
+    kind: stable
+    mean: 12
+    std: 2.0
+  - product_id: prod-unreliable
+    node_id: DC-NORTH
+    kind: stable
+    mean: 20
+    std: 3.0
+  - product_id: prod-healthy
+    node_id: DC-NORTH
+    kind: stable
+    mean: 12
+    std: 1.5
+
+forecast_patterns:
+  # Water forecast matches history — the over-buy is the open PO, not a forecast miss
+  - product_id: prod-covered
+    node_id: DC-NORTH
+    daily_units: 25
+    confidence_spread: 4
+    model_version: fcst-v3.2
+  - product_id: prod-moq
+    node_id: DC-NORTH
+    daily_units: 16
+    confidence_spread: 3
+    model_version: fcst-v3.2
+  - product_id: prod-budget
+    node_id: DC-NORTH
+    daily_units: 22
+    confidence_spread: 4
+    model_version: fcst-v3.2
+  - product_id: prod-storage
+    node_id: DC-SOUTH
+    daily_units: 22
+    confidence_spread: 4
+    model_version: fcst-v3.2
+  # Stale: model has not caught the step-change
+  - product_id: prod-spike
+    node_id: DC-NORTH
+    daily_units: 18
+    confidence_spread: 3
+    model_version: fcst-v3.1
+  - product_id: prod-promo
+    node_id: DC-NORTH
+    daily_units: 24
+    confidence_spread: 4
+    model_version: fcst-v3.2
+  - product_id: prod-alt
+    node_id: DC-NORTH
+    daily_units: 12
+    confidence_spread: 2
+    model_version: fcst-v3.2
+  - product_id: prod-unreliable
+    node_id: DC-NORTH
+    daily_units: 20
+    confidence_spread: 4
+    model_version: fcst-v3.2
+  - product_id: prod-healthy
+    node_id: DC-NORTH
+    daily_units: 12
+    confidence_spread: 2
+    model_version: fcst-v3.2
+
+budgets:
+  - id: BUD-NORTH-BEV-2026-09
+    node_id: DC-NORTH
+    category: beverages
+    period_start: 2026-09-01
+    period_end: 2026-09-30
+    allocated: 80000
+    committed: 15000
+    spent: 18000
+  - id: BUD-NORTH-DAIRY-2026-09
+    node_id: DC-NORTH
+    category: dairy
+    period_start: 2026-09-01
+    period_end: 2026-09-30
+    allocated: 25000
+    committed: 4000
+    spent: 3500
+  - id: BUD-NORTH-COFFEE-2026-09
+    node_id: DC-NORTH
+    category: coffee
+    period_start: 2026-09-01
+    period_end: 2026-09-30
+    allocated: 8000
+    committed: 6500
+    spent: 900
+  - id: BUD-NORTH-DRY-2026-09
+    node_id: DC-NORTH
+    category: dry_goods
+    period_start: 2026-09-01
+    period_end: 2026-09-30
+    allocated: 40000
+    committed: 8000
+    spent: 5000
+  - id: BUD-SOUTH-DRY-2026-09
+    node_id: DC-SOUTH
+    category: dry_goods
+    period_start: 2026-09-01
+    period_end: 2026-09-30
+    allocated: 12000
+    committed: 2500
+    spent: 1800
+
+purchase_orders:
+  - id: PO-COVERED
+    supplier_id: SUP-RELIABLE
+    node_id: DC-NORTH
+    status: confirmed
+    created_at: 2026-09-08T09:30:00
+    expected_delivery_date: 2026-09-20
+    total_cost: 224.0
+    created_by: system
+    lines:
+      - id: POL-COVERED-1
+        product_id: prod-covered
+        ordered_qty: 800
+        confirmed_qty: 800
+        received_qty: 0
+        unit_price: 0.28
+  - id: PO-SHORTFALL
+    supplier_id: SUP-RELIABLE
+    node_id: DC-NORTH
+    status: submitted
+    created_at: 2026-09-08T11:00:00
+    expected_delivery_date: 2026-09-22
+    total_cost: 2000.0
+    created_by: buyer
+    lines:
+      - id: POL-SHORTFALL-1
+        product_id: prod-alt
+        ordered_qty: 500
+        confirmed_qty: 0
+        received_qty: 0
+        unit_price: 4.00
+
+system_recommendations:
+  - id: REC-OVERBUY
+    product_id: prod-covered
+    node_id: DC-NORTH
+    recommended_qty: 800
+    supplier_id: SUP-RELIABLE
+    reason: "Min-max engine: on-hand 180 is below display minimum 240. Propose 800 (4 weeks of cover)."
+    generated_at: 2026-09-15T06:00:00
+  - id: REC-MOQ
+    product_id: prod-moq
+    node_id: DC-NORTH
+    recommended_qty: 320
+    supplier_id: SUP-RELIABLE
+    reason: "Net requirement 320 over lead-time + review. Engine did not round to supplier MOQ."
+    generated_at: 2026-09-15T06:00:00
+  - id: REC-BUDGET
+    product_id: prod-budget
+    node_id: DC-NORTH
+    recommended_qty: 400
+    supplier_id: SUP-RELIABLE
+    reason: "ROP breached. Proposed 400 units at $16 to restore 18 days of cover."
+    generated_at: 2026-09-15T06:00:00
+  - id: REC-STORAGE
+    product_id: prod-storage
+    node_id: DC-SOUTH
+    recommended_qty: 800
+    supplier_id: SUP-RELIABLE
+    reason: "Dark-store min-max suggests 800 Family Cereal. Volume not considered."
+    generated_at: 2026-09-15T06:00:00
+  - id: REC-SPIKE
+    product_id: prod-spike
+    node_id: DC-NORTH
+    recommended_qty: 180
+    supplier_id: SUP-RELIABLE
+    reason: "Forecast-based net requirement using fcst-v3.1 (18 u/day). Last-14d actuals ignored."
+    generated_at: 2026-09-15T06:00:00
+  - id: REC-PROMO
+    product_id: prod-promo
+    node_id: DC-NORTH
+    recommended_qty: 600
+    supplier_id: SUP-RELIABLE
+    reason: "Trailing-14d average inflated by 7-Sep bulk invoice. Engine treated it as a new run-rate."
+    generated_at: 2026-09-15T06:00:00
+  - id: REC-ALT
+    product_id: prod-alt
+    node_id: DC-NORTH
+    recommended_qty: 200
+    supplier_id: SUP-RELIABLE
+    reason: "Reorder 200 from primary (14d lead). Does not consider stockout vs QuickShip 3d."
+    generated_at: 2026-09-15T06:00:00
+  - id: REC-HEALTHY
+    product_id: prod-healthy
+    node_id: DC-NORTH
+    recommended_qty: 140
+    supplier_id: SUP-RELIABLE
+    reason: "Net requirement 140 after rounding to order multiple 20. Budget and storage are fine."
+    generated_at: 2026-09-15T06:00:00

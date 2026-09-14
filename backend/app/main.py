@@ -1,12 +1,23 @@
 """FastAPI application: CORS, routers, /health."""
 
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import agent, approvals, evals, pos, scenarios, traces
 from app.config import get_settings
+from app.db.engine import Base, engine
+from app.db import models as _models  # noqa: F401 — register metadata
 
 settings = get_settings()
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    Base.metadata.create_all(bind=engine)
+    yield
+
 
 app = FastAPI(
     title="AI Purchasing Agent",
@@ -15,6 +26,7 @@ app = FastAPI(
         "LLM-orchestrated purchasing agent. The model reasons; deterministic "
         "Python owns arithmetic, constraints, and post-verification."
     ),
+    lifespan=lifespan,
 )
 
 app.add_middleware(

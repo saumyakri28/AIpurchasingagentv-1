@@ -1,0 +1,5 @@
+# S4 — Purchasing constraint.
+# Binding constraints in this world: coffee budget (SKU-BUDGET),
+# South storage (SKU-STORAGE), Acme MOQ (SKU-MOQ).
+include: base_world
+world: constrained_buy

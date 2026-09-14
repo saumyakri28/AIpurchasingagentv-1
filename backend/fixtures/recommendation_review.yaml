@@ -1,0 +1,4 @@
+# S1 — Purchase Recommendation Review
+# Same catalogue as base. Entry points: REC-OVERBUY (reject) and REC-MOQ (modify).
+include: base_world
+world: recommendation_review

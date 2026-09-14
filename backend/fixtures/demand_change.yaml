@@ -1,0 +1,4 @@
+# S3 — Demand / forecast changed.
+# SKU-SPIKE is a true step-change; SKU-PROMO is a one-off bulk invoice.
+include: base_world
+world: demand_change

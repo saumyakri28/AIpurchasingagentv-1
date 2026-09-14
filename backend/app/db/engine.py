@@ -1,6 +1,6 @@
 """SQLAlchemy 2.x engine. SQLite file-based; URL comes from settings."""
 
-from sqlalchemy import Engine, create_engine
+from sqlalchemy import Engine, create_engine, event
 from sqlalchemy.orm import DeclarativeBase
 
 from app.config import get_settings
@@ -8,6 +8,16 @@ from app.config import get_settings
 
 class Base(DeclarativeBase):
     """Declarative base for all ORM models."""
+
+
+@event.listens_for(Engine, "connect")
+def _enable_sqlite_fks(dbapi_connection, _connection_record) -> None:
+    module = getattr(dbapi_connection, "__class__", type("x", (), {})).__module__
+    if "sqlite" not in module:
+        return
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.close()
 
 
 def _connect_args(url: str) -> dict[str, object]:
