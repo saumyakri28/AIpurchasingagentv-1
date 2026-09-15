@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import agent, approvals, evals, pos, scenarios, tools, traces
+from app.api import agent, approvals, evals, insights, pos, scenarios, tools, traces
 from app.config import get_settings
 from app.db.engine import Base, engine
 from app.db import models as _models  # noqa: F401 — register metadata
@@ -45,6 +45,7 @@ app.include_router(approvals.router)
 app.include_router(traces.router)
 app.include_router(evals.router)
 app.include_router(tools.router)
+app.include_router(insights.router)
 
 
 @app.get("/health")

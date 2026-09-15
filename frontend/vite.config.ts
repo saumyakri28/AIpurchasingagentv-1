@@ -14,6 +14,8 @@ export default defineConfig({
       "/approvals": "http://localhost:8000",
       "/traces": "http://localhost:8000",
       "/evals": "http://localhost:8000",
+      "/insights": "http://localhost:8000",
+      "/tools": "http://localhost:8000",
     },
   },
 });

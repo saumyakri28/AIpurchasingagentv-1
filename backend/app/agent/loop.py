@@ -161,19 +161,30 @@ class AgentLoop:
                 payload.setdefault("supplier_id", rec.supplier_id)
                 payload.setdefault("recommended_qty", rec.recommended_qty)
                 payload["recommendation"] = serialize_recommendation(rec, product)
+        po_id = payload.get("po_id")
+        if po_id:
+            po = self.db.get(PurchaseOrder, po_id)
+            if po is not None:
+                payload["purchase_order"] = serialize_po(po)
+                payload.setdefault("node", po.node_id)
+                ordered = sum(line.ordered_qty for line in po.lines)
+                confirmed = sum(line.confirmed_qty for line in po.lines)
+                payload.setdefault("ordered_qty", ordered)
+                if payload.get("confirmed_qty") is None:
+                    payload["confirmed_qty"] = confirmed
+                payload["gap_qty"] = ordered - int(payload["confirmed_qty"])
+                if not payload.get("sku") and po.lines:
+                    product = self.db.get(Product, po.lines[0].product_id)
+                    if product is not None:
+                        payload["sku"] = product.sku
         sku = payload.get("sku")
-        if sku:
+        if sku and "product" not in payload:
             try:
                 from app.tools.context import product_by_sku
 
                 payload["product"] = serialize_product(product_by_sku(self.db, sku))
             except EntityNotFound:
                 pass
-        po_id = payload.get("po_id")
-        if po_id:
-            po = self.db.get(PurchaseOrder, po_id)
-            if po is not None:
-                payload["purchase_order"] = serialize_po(po)
         self._record("INTAKE", result=payload)
         self.messages = [
             LLMMessage(role="system", content=SYSTEM_PROMPT),
@@ -650,31 +661,23 @@ class AgentLoop:
         if not delivery:
             delivery = "2026-09-22"
         existing_po = intake.get("po_id")
-        if existing_po and decision.decision is DecisionClass.MODIFY:
-            po = self.db.get(PurchaseOrder, existing_po)
-            if po is not None and po.lines:
-                if supplier_id != po.supplier_id:
-                    return (
-                        "split_purchase_order",
-                        {
-                            "po_id": existing_po,
-                            "remainder_supplier_id": supplier_id,
-                            "qty": qty,
-                            "justification": decision.reasoning_summary,
-                            "idempotency_key": f"{key}:split",
-                            "confidence": decision.confidence,
-                        },
-                    )
-                return (
-                    "modify_purchase_order",
-                    {
-                        "po_id": existing_po,
-                        "line_changes": [{"line_id": po.lines[0].id, "ordered_qty": qty}],
-                        "justification": decision.reasoning_summary,
-                        "idempotency_key": f"{key}:modify",
-                        "confidence": decision.confidence,
-                    },
-                )
+        po = self.db.get(PurchaseOrder, existing_po) if existing_po else None
+        if (
+            po is not None
+            and po.lines
+            and decision.decision is DecisionClass.MODIFY
+            and supplier_id == po.supplier_id
+        ):
+            return (
+                "modify_purchase_order",
+                {
+                    "po_id": existing_po,
+                    "line_changes": [{"line_id": po.lines[0].id, "ordered_qty": qty}],
+                    "justification": decision.reasoning_summary,
+                    "idempotency_key": f"{key}:modify",
+                    "confidence": decision.confidence,
+                },
+            )
         return (
             "create_purchase_order",
             {
