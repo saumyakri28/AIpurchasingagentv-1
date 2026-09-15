@@ -313,3 +313,14 @@ class EventLog(Base):
     entity_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
     payload: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     trace_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+
+
+class IdempotencyRecord(Base):
+    """Replay-safe write-tool responses. A retrying agent cannot double-order."""
+
+    __tablename__ = "idempotency_record"
+
+    key: Mapped[str] = mapped_column(String(128), primary_key=True)
+    tool_name: Mapped[str] = mapped_column(String(128), nullable=False)
+    response: Mapped[dict] = mapped_column(JSON, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
