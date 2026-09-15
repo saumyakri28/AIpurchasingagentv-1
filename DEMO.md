@@ -40,6 +40,12 @@ Open [http://localhost:5173](http://localhost:5173). Header must read **api ok**
 3. **ACCEPT** chip, quantity 140, a new PO on Acme, post-verify matched.
 4. POs page shows an agent-created confirmed order.
 
+### Envelope — accept, park pending_approval
+
+1. Variant: **REC-ENVELOPE — accept, park pending_approval ($5500 > $5000)**.
+2. Click **Run agent**.
+3. **ACCEPT** 100, PO status **pending_approval**. Open **Approvals** (key `4`). This uses the default envelope — not an injected threshold.
+
 ### MOQ — escalate
 
 1. Variant: **REC-MOQ — modify toward MOQ (then escalate if C7 blocks)**.
@@ -52,13 +58,13 @@ Open [http://localhost:5173](http://localhost:5173). Header must read **api ok**
 
 Card `supplier-shortfall`. World already has `PO-SHORTFALL` at 500 ordered / 250 confirmed.
 
-### Gap — modify, QuickShip 80
+### Gap — QuickShip bridge, then recovery
 
-1. Variant: **PO-SHORTFALL 500→250 — bridge with QuickShip**.
+1. Variant: **PO-SHORTFALL 500→250 — bridge with QuickShip (partial-confirm recovery)**.
 2. Click **Run agent**.
-3. **MODIFY**, quantity **80**, supplier `SUP-FAST`.
-4. Look for: on-hand 70 + 250 arriving **2026-09-22** still stocks out **2026-09-20**; 3-day QuickShip is the bridge. A **new** PO, not a split of the Acme line.
-5. Validation: `expected_outcome.po_status=confirmed` matches the DB. If a later supplier call had come back partial, this is the screen that would paint the mismatch (see README §7 / E11 for a captured recovery).
+3. First decision is **MODIFY** 80 on `SUP-FAST`. QuickShip confirms **48 of 80**.
+4. **Validation** (key `3`): POST-VERIFY `matched=false`, diffs `po_status` confirmed vs `partially_confirmed`, then **RECONCILE**, then **ESCALATE**. The run must not end as a successful `completed` modify.
+5. POs: original `PO-SHORTFALL` still 250 confirmed; new QuickShip PO is `partially_confirmed` at 48.
 
 ### Covered — accept the short
 

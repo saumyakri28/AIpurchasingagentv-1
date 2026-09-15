@@ -1,5 +1,5 @@
 id: E8
-description: Supplier confirms 250 of 500 and inventory is insufficient — source remainder from QuickShip and post-verify combined cover.
+description: Supplier confirms 250 of 500 and inventory is insufficient — source remainder from QuickShip; QuickShip then partial-confirms. Detect mismatch, reconcile, do not report success.
 world: supplier_shortfall
 intake:
   scenario: supplier-shortfall
@@ -10,20 +10,22 @@ intake:
     sku: SKU-ALT
     node: DC-NORTH
 expected:
-  decision_class: modify
-  quantity_range: [80, 80]
+  decision_class: escalate
+  quantity_range: null
   must_call_tools:
     - get_open_purchase_orders
     - get_inventory
     - compute_replenishment_plan
     - find_alternate_suppliers
     - validate_action
+    - create_purchase_order
   must_not_violate: [C7, C8, C12]
   expected_action:
     type: create_purchase_order
     target: SUP-FAST
-    status: confirmed
+    status: partially_confirmed
   must_post_verify: true
   must_escalate_if_blocked: true
-  recovery: false
+  recovery: true
+  must_reconcile: true
 llm: fake

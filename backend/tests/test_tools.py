@@ -137,6 +137,26 @@ class TestWriteTools:
         approvals = seeded_base.scalars(select(ApprovalRequest)).all()
         assert any("autonomy max" in a.reason for a in approvals)
 
+    def test_default_envelope_parks_constraint_clean_over_5000(self, seeded_base) -> None:
+        result = create_purchase_order(
+            CreatePOArgs(
+                supplier_id="SUP-RELIABLE",
+                node="DC-NORTH",
+                lines=[POLineInput(sku="SKU-ENVELOPE", qty=100)],
+                expected_delivery_date="2026-09-22",
+                justification="olive oil replenishment",
+                idempotency_key="k-envelope",
+            ),
+            db=seeded_base,
+        )
+        seeded_base.commit()
+        assert result["requires_human_approval"] is True
+        assert result["status"] == "pending_approval"
+        assert result["po"]["status"] == "pending_approval"
+        assert float(result["po"]["total_cost"]) == 5500.0
+        reasons = " ".join(result.get("policy_reasons") or [])
+        assert "5000" in reasons
+
     def test_autonomous_submit_commits_budget_and_is_idempotent(self, seeded_base) -> None:
         inv = seeded_base.get(Inventory, ("prod-healthy", "DC-NORTH"))
         assert inv is not None

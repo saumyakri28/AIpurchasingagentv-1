@@ -117,9 +117,7 @@ Idempotency: write tools key on `idempotency_key` in `IdempotencyRecord`. A retr
 
 ## Scenario 2 sequence (partial confirmation + recovery)
 
-World: `supplier_shortfall`. Intake: `PO-SHORTFALL` ordered 500, confirmed 250 of `SKU-ALT` at `DC-NORTH`. Fixture already persisted the short — the agent is deciding what to do *about* it.
-
-Happy path is E8 (`gap`): cover does **not** hold, so the agent creates a **new** PO on `SUP-FAST` for 80 (not a split of Acme — different supplier). Covered path is E7: overlay on-hand 2000, `accept` the short, **no write**.
+World: `supplier_shortfall`. Intake: `PO-SHORTFALL` ordered 500, confirmed 250 of `SKU-ALT` at `DC-NORTH`. The inbound short is already persisted. Cover does **not** hold, so the agent creates a **new** PO on `SUP-FAST` for 80. In this world QuickShip is `partial_accept` ratio 0.6 (48 of 80), so E8 is the recovery loop — not a full-accept happy path. Covered path is E7: overlay on-hand 2000, `accept` the short, **no write**.
 
 ```mermaid
 sequenceDiagram
@@ -139,39 +137,20 @@ sequenceDiagram
   Note over Loop: on-hand 70 + 250 arriving 2026-09-22; stockout 2026-09-20
   Loop->>Tools: find_alternate_suppliers
   Tools-->>Loop: SUP-FAST lead 3d, dearer, reliability 0.86
-  Loop->>Tools: compute_replenishment_plan(..., SUP-FAST)
   Loop->>Tools: validate_action qty=80 supplier=SUP-FAST
   Tools->>Eng: evaluate ProposedAction from DB facts
   Eng-->>Loop: passed
   Loop->>Loop: DECIDE modify + expected_outcome.po_status=confirmed
-  Loop->>Tools: PRE-VALIDATE (assemble-from-DB again)
-  Loop->>Tools: create_purchase_order SUP-FAST 80
-  Tools->>Eng: _evaluate_or_refuse
+  Loop->>Tools: PRE-VALIDATE then create_purchase_order SUP-FAST 80
   Tools->>Sup: submit
-  alt E8 — full accept
-    Sup-->>Tools: accepted, confirmed_qty=80
-    Tools->>DB: persist confirmed
-    Loop->>DB: POST-VERIFY
-    DB-->>Loop: po_status=confirmed matches contract
-    Loop->>Buyer: REPORT decision=modify qty=80
-  else Recovery — supplier partial-confirms or rejects the top-up
-    Sup-->>Tools: confirmed_qty < 80 or accepted=false
-    Tools->>DB: persist partially_confirmed or cancelled
-    Loop->>DB: POST-VERIFY
-    DB-->>Loop: diffs e.g. po_status confirmed vs partially_confirmed
-    Loop->>Loop: RECONCILE (remaining_rounds=2)
-    Loop->>Tools: compensating create/split/cancel or escalate
-    Loop->>DB: POST-VERIFY combined cover
-    alt still unmatched after 2 rounds
-      Loop->>Tools: force escalate (no further buy)
-    end
-    Loop->>Buyer: REPORT — never matched:true after a broken write
-  else E7 — cover already holds
-    Loop->>Loop: DECIDE accept, final_quantity=null
-    Loop->>Loop: PRE-VALIDATE (no buy)
-    Loop->>Loop: ACT (no write)
-    Loop->>Buyer: REPORT accept — PO-SHORTFALL stays 250, no new PO
-  end
+  Sup-->>Tools: partial_accept confirmed_qty=48
+  Tools->>DB: persist partially_confirmed
+  Loop->>DB: POST-VERIFY
+  DB-->>Loop: diffs po_status confirmed vs partially_confirmed
+  Loop->>Loop: RECONCILE
+  Loop->>Tools: escalate
+  Loop->>DB: re-verify (no further buy)
+  Loop->>Buyer: REPORT escalate — never completed after a broken write
 ```
 
 A captured **post-verify recovery** (E11, sibling of this path: supplier `force_reject` on an otherwise clean create) is pasted in README §7. The cycle is the same: `expected confirmed` vs `actual cancelled` → RECONCILE → escalate.

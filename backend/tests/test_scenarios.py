@@ -49,7 +49,7 @@ class TestCatalogue:
         assert s1["endpoint"] == "/agent/run/recommendation-review"
         assert s1["world"] == "recommendation_review"
         variant_ids = {v["id"] for v in s1["variants"]}
-        assert variant_ids == {"overbuy", "healthy", "moq"}
+        assert variant_ids == {"overbuy", "healthy", "envelope", "moq"}
         insights = client.get("/insights")
         assert insights.status_code == 200
         assert {row["id"] for row in insights.json()} >= {
@@ -99,6 +99,28 @@ class TestScenarioRuns:
         finally:
             db.close()
 
+    def test_s1_envelope_parks_pending_approval(self, tmp_path) -> None:
+        db = open_seeded_session(tmp_path / "s1e.db", "recommendation_review")
+        try:
+            trace = execute_scenario(
+                "recommendation-review",
+                db=db,
+                variant_id="envelope",
+                seed=False,
+            )
+            assert trace.decision is not None
+            assert trace.decision.decision.value == "accept"
+            assert trace.decision.final_quantity == 100
+            assert trace.po_id is not None
+            po = db.get(PurchaseOrder, trace.po_id)
+            assert po is not None
+            assert po.status == "pending_approval"
+            assert float(po.total_cost) == 5500.0
+            assert trace.verification is not None
+            assert trace.verification.matched is True
+        finally:
+            db.close()
+
     def test_s1_moq_does_not_execute_blocked_1000(self, tmp_path) -> None:
         db = open_seeded_session(tmp_path / "s1m.db", "recommendation_review")
         try:
@@ -130,16 +152,21 @@ class TestScenarioRuns:
             assert before.status == "partially_confirmed"
             trace = execute_scenario("supplier-shortfall", db=db, seed=False)
             assert trace.decision is not None
-            assert trace.decision.decision.value == "modify"
+            assert trace.decision.decision.value == "escalate"
             assert trace.decision.supplier_id == "SUP-FAST"
-            assert trace.decision.final_quantity == 80
             assert trace.po_id is not None
             new_po = db.get(PurchaseOrder, trace.po_id)
             assert new_po is not None
             assert new_po.supplier_id == "SUP-FAST"
             assert sum(line.ordered_qty for line in new_po.lines) == 80
-            assert trace.verification is not None
-            assert trace.verification.matched is True
+            assert sum(line.confirmed_qty for line in new_po.lines) == 48
+            assert new_po.status == "partially_confirmed"
+            stages = [s.get("stage") for s in trace.steps]
+            assert "RECONCILE" in stages
+            first_post = next(
+                s for s in trace.steps if s.get("stage") == "POST-VERIFY" and not (s.get("result") or {}).get("verification", {}).get("skipped")
+            )
+            assert first_post["result"]["verification"]["matched"] is False
             original = db.get(PurchaseOrder, "PO-SHORTFALL")
             assert original is not None
             assert original.lines[0].confirmed_qty == 250
@@ -163,6 +190,8 @@ class TestScenarioRuns:
             promo = execute_scenario("demand-change", db=db, variant_id="promo", seed=False)
             assert promo.decision is not None
             assert promo.decision.decision.value == "reject"
+            assert promo.verification is not None
+            assert promo.verification.skipped is True
             tools = [s.get("tool") for s in promo.steps]
             assert "get_demand_stats" in tools
             assert "create_purchase_order" not in tools
@@ -256,8 +285,9 @@ class TestScenarioHTTP:
             )
             assert response.status_code == 200, response.text
             body = response.json()
-            assert body["decision"]["decision"] == "modify"
+            assert body["decision"]["decision"] == "escalate"
             assert body["decision"]["supplier_id"] == "SUP-FAST"
-            assert body["verification"]["matched"] is True
+            stages = [s.get("stage") for s in body["steps"]]
+            assert "RECONCILE" in stages
         finally:
             app.dependency_overrides.clear()

@@ -237,9 +237,11 @@ def grade_validation(case: EvalCase, trace: DecisionTrace) -> dict[str, Any]:
 
 
 def grade_recovery(case: EvalCase, trace: DecisionTrace) -> dict[str, Any]:
-    if not case.expected.recovery:
-        return _dim(True, "not a failure-injection case")
     stages = [s.get("stage") for s in (trace.steps or [])]
+    if case.expected.must_reconcile and "RECONCILE" not in stages:
+        return _dim(False, "RECONCILE stage missing")
+    if not case.expected.recovery and not case.expected.must_reconcile:
+        return _dim(True, "not a failure-injection case")
     verification = trace.verification
     matched = getattr(verification, "matched", None)
     if isinstance(verification, dict):

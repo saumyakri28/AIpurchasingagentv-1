@@ -52,6 +52,7 @@ class Expected(BaseModel):
     must_post_verify: bool = True
     must_escalate_if_blocked: bool = False
     recovery: bool = False
+    must_reconcile: bool = False
 
     @field_validator("quantity_range", mode="before")
     @classmethod

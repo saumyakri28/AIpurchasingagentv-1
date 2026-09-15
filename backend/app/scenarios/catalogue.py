@@ -90,6 +90,13 @@ SCENARIOS: tuple[ScenarioSpec, ...] = (
                 note="SKU-HEALTHY: on-hand 100, rec 140, Acme 7-day lead beats stockout.",
             ),
             Variant(
+                id="envelope",
+                label="REC-ENVELOPE — accept, park pending_approval ($5500 > $5000)",
+                intake={"recommendation_id": "REC-ENVELOPE"},
+                expected_decision="accept",
+                note="Constraint-clean 100 × $55 = $5500. Autonomy envelope parks the PO.",
+            ),
+            Variant(
                 id="moq",
                 label="REC-MOQ — modify toward MOQ (then escalate if C7 blocks)",
                 intake={"recommendation_id": "REC-MOQ"},
@@ -114,10 +121,10 @@ SCENARIOS: tuple[ScenarioSpec, ...] = (
         variants=(
             Variant(
                 id="gap",
-                label="PO-SHORTFALL 500→250 — bridge with QuickShip",
+                label="PO-SHORTFALL 500→250 — bridge with QuickShip (partial-confirm recovery)",
                 intake={"po_id": "PO-SHORTFALL", "confirmed_qty": 250, "sku": "SKU-ALT", "node": "DC-NORTH"},
-                expected_decision="modify",
-                note="On-hand 70 + 250 arriving 22-Sep still stocks out 20-Sep. QuickShip 3-day bridge.",
+                expected_decision="escalate",
+                note="On-hand 70 + 250 arriving 22-Sep still stocks out 20-Sep. QuickShip 80-unit bridge then partial-confirms 48; post-verify recovers.",
             ),
             Variant(
                 id="covered",

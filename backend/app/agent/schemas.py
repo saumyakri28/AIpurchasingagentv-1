@@ -97,6 +97,8 @@ class VerificationDiff(BaseModel):
 class VerificationReport(BaseModel):
     matched: bool
     diffs: list[VerificationDiff] = Field(default_factory=list)
+    reason: str | None = None
+    skipped: bool = False
 
 
 class DecisionTrace(BaseModel):

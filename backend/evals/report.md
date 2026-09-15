@@ -3,11 +3,11 @@
 Each column is a separate grader. There is no single opaque score.
 Stability is the share of repeats that matched the modal (decision, pass-vector).
 
-- id: `EV-20260915041847`
+- id: `EV-20260915083109`
 - llm: `fake`
 - suite: `all`
 - repeat: 3
-- created: 2026-09-15T04:18:47Z
+- created: 2026-09-15T08:31:09Z
 - cases passed: 13/13
 - mean stability: 1.0
 
@@ -113,16 +113,16 @@ Decision: `accept` · stability 1.0
 - **Recovery**: pass (pass_rate=1.0) — not a failure-injection case
 - **Explain**: pass (pass_rate=1.0) — all cited numbers appear in a tool result
 
-### E8 — Supplier confirms 250 of 500 and inventory is insufficient — source remainder from QuickShip and post-verify combined cover.
+### E8 — Supplier confirms 250 of 500 and inventory is insufficient — source remainder from QuickShip; QuickShip then partial-confirms. Detect mismatch, reconcile, do not report success.
 
-Decision: `modify` · stability 1.0
+Decision: `escalate` · stability 1.0
 
-- **Decision**: pass (pass_rate=1.0) — got modify allowed ['modify']; qty 80 in range
+- **Decision**: pass (pass_rate=1.0) — got escalate allowed ['escalate']
 - **Info**: pass (pass_rate=1.0) — required tools present before the decision
 - **Constraint**: pass (pass_rate=1.0) — budgets, storage and executed PO lines hold
 - **Action**: pass (pass_rate=1.0) — create_purchase_order matched
 - **Validation**: pass (pass_rate=1.0) — pre-validation and post-verify reports present
-- **Recovery**: pass (pass_rate=1.0) — not a failure-injection case
+- **Recovery**: pass (pass_rate=1.0) — detected mismatch and compensated / escalated
 - **Explain**: pass (pass_rate=1.0) — all cited numbers appear in a tool result
 
 ### E9 — Real demand spike — increase qty (do not keep the stale 180 rec).

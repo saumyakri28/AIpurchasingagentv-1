@@ -32,10 +32,12 @@ from app.agent.schemas import (
     DecisionClass,
     DecisionTrace,
     ExpectedOutcome,
+    VerificationReport,
     decision_tool_schema,
     parse_json_object,
 )
 from app.agent.validator import (
+    BUY_WRITE_TOOLS,
     MAX_PREVALIDATE_REVISIONS,
     MAX_RECONCILE_ROUNDS,
     collect_source_of_truth,
@@ -361,7 +363,29 @@ class AgentLoop:
                 self.db.commit()
         return result if isinstance(result, dict) else {"result": result}
 
+    def _last_act_tool(self) -> str | None:
+        for step in reversed(self.steps):
+            if step.get("stage") == "ACT":
+                tool = step.get("tool")
+                return str(tool) if tool else None
+        return None
+
     def _post_verify(self, decision: Decision, intake: dict[str, Any]) -> Any:
+        tool = self._last_act_tool()
+        is_buy_write = tool in BUY_WRITE_TOOLS
+        if not is_buy_write:
+            report = VerificationReport(
+                matched=True,
+                diffs=[],
+                skipped=True,
+                reason="no_write",
+            )
+            self._record(
+                "POST-VERIFY",
+                note="skipped — no buy write",
+                result={"verification": report.model_dump(mode="json")},
+            )
+            return report
         truth = collect_source_of_truth(
             self.db,
             po_id=self.po_id or intake.get("po_id"),
@@ -369,7 +393,11 @@ class AgentLoop:
             node=decision.node or intake.get("node"),
             supplier_id=decision.supplier_id or intake.get("supplier_id"),
         )
-        report = post_verify(decision.expected_outcome or ExpectedOutcome(), source_of_truth=truth)
+        report = post_verify(
+            decision.expected_outcome or ExpectedOutcome(),
+            source_of_truth=truth,
+            require_complete=True,
+        )
         self._record(
             "POST-VERIFY",
             result={

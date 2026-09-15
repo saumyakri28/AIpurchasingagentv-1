@@ -152,6 +152,35 @@ def source_shortfall_bridge() -> dict[str, Any]:
     }
 
 
+def recover_shortfall_partial() -> dict[str, Any]:
+    return {
+        "decision": "escalate",
+        "final_quantity": None,
+        "supplier_id": "SUP-FAST",
+        "node": "DC-NORTH",
+        "confidence": 0.46,
+        "reasoning_summary": (
+            "create_purchase_order submitted 80 to QuickShip but the supplier API confirmed 48 "
+            "(partial_accept). post-verify po_status is partially_confirmed not confirmed. "
+            "I will not report success. Escalating the remaining gap."
+        ),
+        "key_factors": [
+            _kf("po_status", "partially_confirmed", "create_purchase_order", "blocking"),
+            _kf("confirmed_qty", "48 of 80", "create_purchase_order", "blocking"),
+        ],
+        "constraints_considered": [
+            "C7 lead_time_beats_stockout: the 48-unit confirm still leaves a cover hole",
+        ],
+        "alternatives_considered": [
+            {"option": "report the 80-unit PO as done", "why_not": "only 48 confirmed; expected_outcome missed"},
+            {"option": "top-up another 32 from Acme", "why_not": "14-day lead still misses 20-Sep"},
+        ],
+        "expected_outcome": {},
+        "requires_human_approval": True,
+        "approval_reason": "QuickShip partial-confirmed 48 of 80. Buyer should cover the remainder.",
+    }
+
+
 def reject_promo() -> dict[str, Any]:
     return {
         "decision": "reject",
@@ -312,6 +341,40 @@ def accept_healthy() -> dict[str, Any]:
             "expected_delivery_date": "2026-09-22",
         },
         "requires_human_approval": False,
+    }
+
+
+def accept_envelope() -> dict[str, Any]:
+    return {
+        "decision": "accept",
+        "final_quantity": 100,
+        "supplier_id": "SUP-RELIABLE",
+        "node": "DC-NORTH",
+        "expected_delivery_date": "2026-09-22",
+        "confidence": 0.82,
+        "reasoning_summary": (
+            "REC-ENVELOPE 100 is constraint-clean at unit price 55. That order exceeds the autonomy envelope, "
+            "so the write must park pending_approval rather than submit."
+        ),
+        "key_factors": [
+            _kf("recommended_qty", "100", "get_recommendation", "supports_higher"),
+            _kf("landed_cost", "5500", "compute_replenishment_plan", "blocking"),
+            _kf("validate_100", "passed", "validate_action", "supports_higher"),
+        ],
+        "constraints_considered": [
+            "C1 budget_sufficient: 5500 is inside the dry_goods envelope",
+            "C3 moq_satisfied: 100 >= 4",
+        ],
+        "alternatives_considered": [
+            {"option": "buy 88 to stay under 5000", "why_not": "88 is not the rec; buyer should approve 100"},
+        ],
+        "expected_outcome": {
+            "po_status": "pending_approval",
+            "ordered_qty": 100,
+            "committed_cost": 5500.0,
+        },
+        "requires_human_approval": True,
+        "approval_reason": "Order value 5500.00 exceeds autonomy max 5000.00",
     }
 
 
@@ -482,6 +545,17 @@ SCRIPTS: dict[str, list[dict[str, Any]]] = {
         ),
         _decide(accept_healthy()),
     ],
+    "recommendation-review:envelope": [
+        _plan(
+            "Plan: load REC-ENVELOPE, replenishment, validate 100. Cost 5500 is over the autonomy envelope.",
+            _call(1, "get_recommendation", recommendation_id="REC-ENVELOPE"),
+            _call(2, "get_inventory", sku="SKU-ENVELOPE", node="DC-NORTH"),
+            _call(3, "get_supplier_terms", supplier_id="SUP-RELIABLE", sku="SKU-ENVELOPE"),
+            _call(4, "compute_replenishment_plan", sku="SKU-ENVELOPE", node="DC-NORTH", supplier_id="SUP-RELIABLE"),
+            _call(5, "validate_action", sku="SKU-ENVELOPE", node="DC-NORTH", supplier_id="SUP-RELIABLE", qty=100),
+        ),
+        _decide(accept_envelope()),
+    ],
     "recommendation-review:moq": [
         _plan(
             "Plan: load REC-MOQ, supplier terms, alternates, replenishment, validate 1000.",
@@ -505,6 +579,7 @@ SCRIPTS: dict[str, list[dict[str, Any]]] = {
             _call(6, "validate_action", sku="SKU-ALT", node="DC-NORTH", supplier_id="SUP-FAST", qty=80),
         ),
         _decide(source_shortfall_bridge()),
+        _decide(recover_shortfall_partial()),
     ],
     "supplier-shortfall:covered": [
         _plan(

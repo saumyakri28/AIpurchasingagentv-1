@@ -28,6 +28,10 @@ from app.tools.errors import EntityNotFound
 MAX_PREVALIDATE_REVISIONS = 2
 MAX_RECONCILE_ROUNDS = 2
 ENGINE = ConstraintEngine()
+WRITE_CONTRACT_FIELDS = ("po_status", "ordered_qty", "committed_cost")
+BUY_WRITE_TOOLS = frozenset(
+    {"create_purchase_order", "modify_purchase_order", "split_purchase_order"}
+)
 
 
 def pre_validate(proposed_action: dict[str, Any], *, db: Session | None = None) -> ValidationReport:
@@ -78,10 +82,27 @@ def post_verify(
     expected: ExpectedOutcome,
     *,
     source_of_truth: dict[str, Any],
+    require_complete: bool = False,
 ) -> VerificationReport:
     """Re-read persisted state and diff against the declared expected_outcome."""
     diffs: list[VerificationDiff] = []
     declared = expected.model_dump()
+    if require_complete:
+        missing = [field for field in WRITE_CONTRACT_FIELDS if declared.get(field) is None]
+        if missing:
+            for field in missing:
+                diffs.append(
+                    VerificationDiff(
+                        field=field,
+                        expected=None,
+                        actual=source_of_truth.get(field),
+                    )
+                )
+            return VerificationReport(
+                matched=False,
+                diffs=diffs,
+                reason="incomplete_expected_outcome",
+            )
     for field, wanted in declared.items():
         if wanted is None:
             continue

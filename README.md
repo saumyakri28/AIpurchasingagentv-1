@@ -162,7 +162,7 @@ flowchart TD
   Recon --> Decide
 ```
 
-Scenario 2 sequence, including the partial-confirmation recovery path (the inbound short is already on `PO-SHORTFALL`; a later write can itself come back short):
+Scenario 2 sequence (this is the default `gap` run). The inbound short is already on `PO-SHORTFALL`. The top-up supplier (`SUP-FAST`) is fixture-configured `partial_accept` ratio 0.6, so the agent's own write misses `expected_outcome` and recovery runs:
 
 ```mermaid
 sequenceDiagram
@@ -177,22 +177,17 @@ sequenceDiagram
   Note over Agent: on-hand 70 + 250 arriving 22-Sep; stockout 20-Sep
   Agent->>Tools: find_alternate_suppliers
   Agent->>Tools: validate_action qty=80 supplier=SUP-FAST
-  Agent->>Agent: emit Decision(modify) + expected_outcome.po_status=confirmed
-  Agent->>Tools: create_purchase_order (QuickShip 80)
+  Agent->>Agent: DECIDE modify + expected_outcome.po_status=confirmed
+  Agent->>Tools: PRE-VALIDATE then create_purchase_order (QuickShip 80)
   Tools->>Supplier: submit
-  alt full accept (E8 happy path)
-    Supplier-->>Tools: accepted 80
-    Agent->>DB: POST-VERIFY expected vs persisted
-    Agent->>Agent: REPORT modify
-  else partial confirm or reject (recovery)
-    Supplier-->>Tools: confirmed_qty < ordered or accepted=false
-    Tools->>DB: persist partially_confirmed or cancelled
-    Agent->>DB: POST-VERIFY
-    Note over Agent: diffs e.g. po_status confirmed vs partially_confirmed
-    Agent->>Agent: RECONCILE (max 2)
-    Agent->>Tools: top-up, split, reduce, or escalate
-    Agent->>DB: re-verify combined position
-  end
+  Supplier-->>Tools: partial_accept 48 of 80
+  Tools->>DB: persist partially_confirmed
+  Agent->>DB: POST-VERIFY
+  Note over Agent: matched=false diffs po_status confirmed vs partially_confirmed
+  Agent->>Agent: RECONCILE
+  Agent->>Tools: escalate (compensating action)
+  Agent->>DB: re-verify (no further buy)
+  Agent->>Agent: REPORT escalate — never completed/success
 ```
 
 Caps: 12 LLM turns, 80k tokens. Stages: INTAKE → PLAN → INVESTIGATE → DECIDE → PRE-VALIDATE → ACT → POST-VERIFY → RECONCILE → REPORT.
@@ -234,13 +229,14 @@ Source of truth is SQLite. The mock supplier API is not source of truth: after a
 | `SKU-MOQ` | True need ~320 vs Acme MOQ **1000**. Rounding is a modify until C7/C12 block, then escalate. |
 | `SKU-BUDGET` | Coffee remaining **$600**; 400 × $16 = $6400. Even MOQ 50 = $800. `suggested_max=0`. |
 | `SKU-STORAGE` | DC-SOUTH is **15 m³**. Rec 800 cereal does not fit; `suggested_max_feasible_qty=96`. |
-| `SKU-ALT` / `PO-SHORTFALL` | 500 ordered, **250** confirmed, arriving 22-Sep. On-hand 70 stocks out 20-Sep. QuickShip (`SUP-FAST`) is faster and dearer. |
+| `SKU-ALT` / `PO-SHORTFALL` | 500 ordered, **250** confirmed, arriving 22-Sep. On-hand 70 stocks out 20-Sep. QuickShip (`SUP-FAST`) is faster, dearer, and **partial_accept 0.6** in the S2 world so the top-up write recovers. |
+| `SKU-ENVELOPE` | Constraint-clean 100 × $55 = **$5500**. Parks `pending_approval` at the default $5000 envelope. |
 | `SKU-SPIKE` | `spike_detected`; forecast still ~18 u/day. True step-change vs stale rec 180. |
 | `SKU-PROMO` | `anomaly_flag`; rec 600 treats a one-off invoice as run-rate. Anti-overreaction. |
 | `SKU-UNRELIABLE` / `SUP-UNRELIABLE` | Reliability **0.41**, below the 0.70 floor. `PO-GHOST` is an overdue submitted PO. |
 | `supplier_shortfall_covered.yaml` | Overlay on-hand **2000** so E7 can accept the 250 short with no new PO. |
 
-Nodes: `DC-NORTH` (800 m³) and `DC-SOUTH` (15 m³). Suppliers: Acme (`SUP-RELIABLE`, `full_accept`), QuickShip (`SUP-FAST`), Bargain Cash & Carry (`partial_accept` ratio 0.5). Worlds: `base`, `recommendation_review`, `supplier_shortfall`, `demand_change`, `constrained_buy`.
+Nodes: `DC-NORTH` (800 m³) and `DC-SOUTH` (15 m³). Suppliers: Acme (`SUP-RELIABLE`, `full_accept`), QuickShip (`SUP-FAST`, `full_accept` in base, `partial_accept` ratio 0.6 in the S2 world), Bargain Cash & Carry (`partial_accept` ratio 0.5). Worlds: `base`, `recommendation_review`, `supplier_shortfall`, `demand_change`, `constrained_buy`.
 
 ---
 
@@ -360,7 +356,7 @@ Implemented in `backend/app/domain/policy.py`. Thresholds are settings, not prom
 
 **Why these numbers.**
 
-- **$5000.** At this catalogue, a healthy Acme replenishment is $175 (140 × $1.25). QuickShip bridges and South cereal fills are hundreds of dollars. $5000 lets routine replenishment run unattended and still catches a 400-unit coffee drop ($6400) or a sloppy MOQ-1000 fill. It is a buyer-desk envelope, not a finance policy.
+- **$5000.** Routine replenishment stays autonomous (SKU-HEALTHY 140 × $1.25 = $175). `SKU-ENVELOPE` is the reviewer-visible gate: 100 × $55 = $5500 is constraint-clean and parks `pending_approval` with the default setting — no injected `max_order_value`. Coffee 400 × $16 is still killed by C1 before policy.
 - **0.70 reliability.** Bargain Cash & Carry is **0.41** (below); QuickShip **0.86** and Acme **0.94** (above). Auto-send money to a 52% on-time vendor is the failure mode this gate exists for. It does **not** replace C11 (warn-only on the engine).
 - **0.60 confidence.** Below that the model is guessing. Scripts in this repo sit at 0.7–0.95, so the gate is idle in FakeLLM evals and live when a real model hedges.
 
@@ -393,7 +389,7 @@ Seven independent graders. There is **no** single opaque score. A case passes on
 | E5 | South cube | `modify` **96**, not 800 |
 | E6 | Acme lead misses stockout | `escalate` or switch supplier; do not buy Acme |
 | E7 | 500→250 but on-hand 2000 | `accept` the short, no new PO |
-| E8 | 500→250, stockout 20-Sep | `modify` QuickShip **80** |
+| E8 | 500→250, QuickShip top-up partial-confirms 48/80 | detect, RECONCILE, `escalate` |
 | E9 | True spike | `modify` **240** |
 | E10 | Promo one-off | `reject` |
 | E11 | Supplier rejects a clean PO | detect, recover, `escalate` |
@@ -422,7 +418,7 @@ Dashboard: console key `6`, or `POST /evals/run`.
 - **FakeLLM stability 1.0 is not real-LLM stability.** E1–E13 pass because each case has a canned tool script. That measures the loop, the engine, and the grader — not Claude. A live `LLM_PROVIDER=anthropic` run is a different product.
 - **Budget cannot partial-buy.** E4/`SKU-BUDGET`: remaining $600, MOQ 50 × $16 = $800, `suggested_max_feasible_qty=0`. Escalating is correct for this fixture. A better agent would still quantify stockout cost vs a budget-exception request; this one has no objective function, so it escalates rather than inventing a 37-unit (illegal) slice.
 - **Two scripts, one world.** UI default for S3 `SKU-SPIKE` is `investigate_further` (stale forecast, do not guess a qty). Eval E9 uses a different script that `modify`s to 240. Likewise S2 `covered` in the console reseeds `supplier_shortfall` (on-hand 70) but FakeLLM still runs the accept-the-short script; the numbers that make that *correct* are the E7 overlay (`supplier_shortfall_covered`, on-hand 2000). A live model has to pick; the harness does not claim both are the same policy.
-- **`stockout_risk` is a brittle contract field.** Cover near 20 days is easy to call `low` vs `medium`. Write scripts usually **omit** it so post-verify does not false-fail. A real model that fills every field will reconcile more often.
+- **`stockout_risk` is a brittle contract field on writes.** Cover near 20 days is easy to call `low` vs `medium`. Write scripts usually **omit** it. Reject / investigate_further **skip** post-verify entirely (no noisy mismatch on a correct reject). Buy writes must declare `po_status`, `ordered_qty`, and `committed_cost` or post-verify fails with `incomplete_expected_outcome`.
 - **Accept-the-short is easy to implement wrong.** An `accept` with `final_quantity=null` must **not** write and must **not** escalate. Early loop versions treated “accept without a qty” as an error. E7 depends on that being a no-op.
 - **No forecast model.** Forward demand is a fixture series plus rolling mean/std. The agent can notice a stale forecast (`spike_detected`); it cannot produce a statistically revised one.
 - **Single-node decisions.** It will not allocate a buy across DC-NORTH and DC-SOUTH.

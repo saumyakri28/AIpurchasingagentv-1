@@ -11,6 +11,7 @@
 #   SKU-ALT         QuickShip is faster and dearer than Acme
 #   SKU-UNRELIABLE  primary is Bargain Cash & Carry (poor fill / reliability)
 #   SKU-HEALTHY     recommendation is actually right (accept case)
+#   SKU-ENVELOPE    constraint-clean buy of $5500 exceeds AUTONOMY_MAX_ORDER_VALUE
 
 world: base
 as_of: 2026-09-15
@@ -25,6 +26,7 @@ trade_offs:
   promo_sku: SKU-PROMO
   alternate_sku: SKU-ALT
   unreliable_supplier: SUP-UNRELIABLE
+  envelope_sku: SKU-ENVELOPE
   healthy_sku: SKU-HEALTHY
 
 nodes:
@@ -153,6 +155,15 @@ products:
     volume_per_unit_m3: 0.0015
     shelf_life_days: 240
     abc_class: B
+  - id: prod-envelope
+    sku: SKU-ENVELOPE
+    name: Premium Olive Oil 5L
+    category: dry_goods
+    unit_cost: 48.00
+    units_per_case: 4
+    volume_per_unit_m3: 0.006
+    shelf_life_days: 540
+    abc_class: A
 
 supplier_products:
   # Still water — covered by open PO
@@ -268,6 +279,15 @@ supplier_products:
     lead_time_days: 7
     is_primary: true
     max_units_per_order: 2000
+  # Olive oil — constraint-clean order of 100 × $55 = $5500, above the $5000 envelope
+  - supplier_id: SUP-RELIABLE
+    product_id: prod-envelope
+    unit_price: 55.00
+    moq_units: 4
+    order_multiple_units: 4
+    lead_time_days: 7
+    is_primary: true
+    max_units_per_order: 400
 
 inventory:
   - product_id: prod-covered
@@ -333,6 +353,13 @@ inventory:
     in_transit: 0
     damaged: 0
     last_counted_at: 2026-09-13T07:00:00
+  - product_id: prod-envelope
+    node_id: DC-NORTH
+    on_hand: 200
+    reserved: 0
+    in_transit: 0
+    damaged: 0
+    last_counted_at: 2026-09-13T07:00:00
 
 sales_patterns:
   - product_id: prod-covered
@@ -384,6 +411,11 @@ sales_patterns:
     kind: stable
     mean: 12
     std: 1.5
+  - product_id: prod-envelope
+    node_id: DC-NORTH
+    kind: stable
+    mean: 10
+    std: 1.2
 
 forecast_patterns:
   # Water forecast matches history — the over-buy is the open PO, not a forecast miss
@@ -431,6 +463,11 @@ forecast_patterns:
   - product_id: prod-healthy
     node_id: DC-NORTH
     daily_units: 12
+    confidence_spread: 2
+    model_version: fcst-v3.2
+  - product_id: prod-envelope
+    node_id: DC-NORTH
+    daily_units: 10
     confidence_spread: 2
     model_version: fcst-v3.2
 
@@ -580,4 +617,11 @@ system_recommendations:
     recommended_qty: 140
     supplier_id: SUP-RELIABLE
     reason: "Net requirement 140 after rounding to order multiple 20. Budget and storage are fine."
+    generated_at: 2026-09-15T06:00:00
+  - id: REC-ENVELOPE
+    product_id: prod-envelope
+    node_id: DC-NORTH
+    recommended_qty: 100
+    supplier_id: SUP-RELIABLE
+    reason: "Net requirement 100. Landed cost $5500 is constraint-clean but above the $5000 autonomy envelope."
     generated_at: 2026-09-15T06:00:00

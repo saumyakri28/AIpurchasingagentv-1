@@ -1,7 +1,23 @@
 # S2 — Supplier cannot fulfil 500 of SKU-ALT; only 250 confirmed.
 # Agent must decide whether the 250-unit gap actually matters.
+# QuickShip (the top-up) partial-accepts ~0.6 so the agent's own write
+# misses expected_outcome and the recovery loop is forced to run.
 include: base_world
 world: supplier_shortfall
+
+suppliers:
+  - id: SUP-FAST
+    name: QuickShip Trading
+    active: true
+    payment_terms_days: 15
+    reliability_score: 0.86
+    avg_lead_time_days: 3.0
+    lead_time_std_days: 0.8
+    fill_rate_pct: 91.0
+    on_time_pct: 89.0
+    api_behaviour: partial_accept
+    api_behaviour_params:
+      ratio: 0.6
 
 purchase_orders:
   - id: PO-SHORTFALL

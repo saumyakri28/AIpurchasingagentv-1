@@ -179,6 +179,16 @@ class TestValidator:
         fields = {d.field for d in report.diffs}
         assert "po_status" in fields
 
+    def test_empty_expected_outcome_fails_on_write(self) -> None:
+        report = post_verify(
+            ExpectedOutcome(),
+            source_of_truth={"po_status": "confirmed", "ordered_qty": 20, "committed_cost": 25.0},
+            require_complete=True,
+        )
+        assert report.matched is False
+        assert report.reason == "incomplete_expected_outcome"
+        assert {d.field for d in report.diffs} >= {"po_status", "ordered_qty", "committed_cost"}
+
     def test_reconcile_caps_at_two(self) -> None:
         report = post_verify(
             ExpectedOutcome(po_status="confirmed"),
@@ -205,6 +215,9 @@ class TestFakeLLMLoop:
         assert persisted is not None
         assert persisted.status == "rejected"
         assert persisted.decision["decision"] == "reject"
+        assert trace.verification is not None
+        assert trace.verification.skipped is True
+        assert trace.verification.reason == "no_write"
 
     def test_schema_retry_then_valid_reject(self, seeded_base) -> None:
         script = [
