@@ -400,6 +400,13 @@ Seven independent graders. There is **no** single opaque score. A case passes on
 
 Sample report: `backend/evals/report.md` (`EV-20260915041847`, FakeLLM, suite `all`, repeat 3).
 
+> These results use FakeLLM, which replays scripted tool-call sequences. They verify that the
+> agent loop, constraint enforcement, pre-validation, post-verification and reconciliation
+> plumbing behave correctly and deterministically. They are **not** a measure of model
+> judgement — a scripted agent is perfectly stable by construction. Evaluating decision
+> quality requires running `--llm real`, which needs an API key; expected real-LLM results
+> are lower on both pass rate and stability.
+
 | Case | Decision | Info | Constraint | Action | Validation | Recovery | Explain | Stability | Overall |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | E1–E13 | pass | pass | pass | pass | pass | pass | pass | 1.0 | **13/13 pass**, mean stability **1.0** |
