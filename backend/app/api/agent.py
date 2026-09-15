@@ -1,13 +1,36 @@
-"""Agent run entry points. Full handlers land in Prompt 5."""
+"""Agent run entry points. Scenario wrappers land in Prompt 5."""
 
-from fastapi import APIRouter, HTTPException
+from __future__ import annotations
+
+from typing import Any
+
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel, Field
+from sqlalchemy.orm import Session
+
+from app.agent.llm import FakeLLM, build_llm
+from app.agent.loop import AgentLoop
+from app.db.session import get_db
 
 router = APIRouter(prefix="/agent", tags=["agent"])
 
 
+class AgentRunBody(BaseModel):
+    intake: dict[str, Any]
+    script: list[dict[str, Any]] | None = Field(
+        default=None,
+        description="Optional FakeLLM fixture. When set, the run is deterministic (no API key).",
+    )
+
+
 @router.post("/run")
-def run_agent() -> dict[str, str]:
-    raise HTTPException(status_code=501, detail="Agent loop lands in Prompt 4")
+def run_agent(body: AgentRunBody, db: Session = Depends(get_db)) -> dict[str, Any]:
+    llm = FakeLLM(body.script) if body.script is not None else build_llm()
+    try:
+        trace = AgentLoop(llm, db).run(body.intake)
+    except RuntimeError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    return trace.model_dump(mode="json")
 
 
 @router.post("/run/recommendation-review")
