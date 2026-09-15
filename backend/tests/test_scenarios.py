@@ -49,7 +49,7 @@ class TestCatalogue:
         assert s1["endpoint"] == "/agent/run/recommendation-review"
         assert s1["world"] == "recommendation_review"
         variant_ids = {v["id"] for v in s1["variants"]}
-        assert variant_ids == {"overbuy", "moq"}
+        assert variant_ids == {"overbuy", "healthy", "moq"}
         insights = client.get("/insights")
         assert insights.status_code == 200
         assert {row["id"] for row in insights.json()} >= {
@@ -75,6 +75,27 @@ class TestScenarioRuns:
             tools = [s.get("tool") for s in trace.steps]
             assert "compute_replenishment_plan" in tools
             assert "create_purchase_order" not in tools
+        finally:
+            db.close()
+
+    def test_s1_healthy_accepts(self, tmp_path) -> None:
+        db = open_seeded_session(tmp_path / "s1h.db", "recommendation_review")
+        try:
+            trace = execute_scenario(
+                "recommendation-review",
+                db=db,
+                variant_id="healthy",
+                seed=False,
+            )
+            assert trace.decision is not None
+            assert trace.decision.decision.value == "accept"
+            assert trace.decision.final_quantity == 140
+            assert trace.po_id is not None
+            po = db.get(PurchaseOrder, trace.po_id)
+            assert po is not None
+            assert po.status == "confirmed"
+            assert trace.verification is not None
+            assert trace.verification.matched is True
         finally:
             db.close()
 

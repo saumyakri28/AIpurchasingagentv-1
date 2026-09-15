@@ -1,0 +1,24 @@
+id: E1
+description: Recommendation is actually right — accept REC-HEALTHY.
+world: recommendation_review
+intake:
+  scenario: recommendation-review
+  variant: healthy
+  payload:
+    recommendation_id: REC-HEALTHY
+expected:
+  decision_class: accept
+  quantity_range: [100, 160]
+  must_call_tools:
+    - get_recommendation
+    - compute_replenishment_plan
+    - validate_action
+  must_not_violate: [C1, C2, C3, C4, C7, C8]
+  expected_action:
+    type: create_purchase_order
+    target: SKU-HEALTHY
+    status: confirmed
+  must_post_verify: true
+  must_escalate_if_blocked: false
+  recovery: false
+llm: fake

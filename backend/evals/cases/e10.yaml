@@ -1,0 +1,23 @@
+id: E10
+description: Promo-driven one-off spike — do NOT increase. Anti-overreaction.
+world: demand_change
+intake:
+  scenario: demand-change
+  variant: promo
+  payload:
+    sku: SKU-PROMO
+    node: DC-NORTH
+expected:
+  decision_class: reject
+  quantity_range: null
+  must_call_tools:
+    - get_demand_stats
+    - get_sales_history
+    - compute_replenishment_plan
+  must_not_violate: [C8, C12]
+  expected_action:
+    type: none
+  must_post_verify: true
+  must_escalate_if_blocked: true
+  recovery: false
+llm: fake

@@ -1,0 +1,22 @@
+id: E6
+description: Lead time misses the stockout date — do not buy from Acme; escalate or switch to a faster supplier.
+world: recommendation_review
+intake:
+  scenario: recommendation-review
+  variant: moq
+  payload:
+    recommendation_id: REC-MOQ
+expected:
+  decision_class: [escalate, modify]
+  quantity_range: null
+  must_call_tools:
+    - compute_replenishment_plan
+    - validate_action
+    - find_alternate_suppliers
+  must_not_violate: [C7]
+  expected_action:
+    type: escalate
+  must_post_verify: true
+  must_escalate_if_blocked: true
+  recovery: false
+llm: fake

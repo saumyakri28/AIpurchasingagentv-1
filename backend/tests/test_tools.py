@@ -21,13 +21,16 @@ from app.tools.registry import registry
 from app.tools.schemas import (
     CreatePOArgs,
     DemandStatsArgs,
+    LineChange,
+    ModifyPOArgs,
     POLineInput,
     RecommendationId,
     ReplenishmentPlanArgs,
     SkuArg,
+    SplitPOArgs,
     ValidateActionArgs,
 )
-from app.tools.write_tools import create_purchase_order
+from app.tools.write_tools import create_purchase_order, modify_purchase_order, split_purchase_order
 
 
 @pytest.fixture
@@ -268,3 +271,62 @@ class TestSupplierAPIStandalone:
         assert revised.revised_after_confirm is True
         assert revised.confirmed_lead_time_days == 16
         assert revised.behaviour is SupplierBehaviour.CONFIRM_THEN_REVISE
+
+
+class TestWriteToolRefusals:
+    """Every write that can create stock must refuse through ConstraintEngine."""
+
+    def test_modify_increase_refuses_redundant_cover(self, seeded_base) -> None:
+        po = seeded_base.get(PurchaseOrder, "PO-COVERED")
+        assert po is not None
+        before = po.lines[0].ordered_qty
+        with pytest.raises(ConstraintRefused):
+            modify_purchase_order(
+                ModifyPOArgs(
+                    po_id="PO-COVERED",
+                    line_changes=[LineChange(line_id=po.lines[0].id, ordered_qty=before + 800)],
+                    justification="engine said more water",
+                    idempotency_key="k-mod-overbuy",
+                ),
+                db=seeded_base,
+            )
+        seeded_base.rollback()
+        seeded_base.refresh(po)
+        assert po.lines[0].ordered_qty == before
+
+    def test_split_refuses_when_remainder_fails_constraints(self, seeded_base) -> None:
+        with pytest.raises(ConstraintRefused):
+            split_purchase_order(
+                SplitPOArgs(
+                    po_id="PO-COVERED",
+                    remainder_supplier_id="SUP-FAST",
+                    qty=200,
+                    justification="split the covered water",
+                    idempotency_key="k-split-overbuy",
+                ),
+                db=seeded_base,
+            )
+        seeded_base.rollback()
+        n_agent = seeded_base.scalars(select(PurchaseOrder).where(PurchaseOrder.created_by == "agent")).all()
+        assert n_agent == []
+
+    def test_create_budget_block_does_not_commit(self, seeded_base) -> None:
+        before = seeded_base.scalar(select(func.count()).select_from(PurchaseOrder))
+        with pytest.raises(ConstraintRefused) as exc:
+            create_purchase_order(
+                CreatePOArgs(
+                    supplier_id="SUP-RELIABLE",
+                    node="DC-NORTH",
+                    lines=[POLineInput(sku="SKU-BUDGET", qty=400)],
+                    expected_delivery_date="2026-09-22",
+                    justification="coffee over envelope",
+                    idempotency_key="k-budget-block",
+                ),
+                db=seeded_base,
+            )
+        seeded_base.rollback()
+        after = seeded_base.scalar(select(func.count()).select_from(PurchaseOrder))
+        assert after == before
+        names = {v["name"] for v in exc.value.as_dict()["blocking_violations"]}
+        assert "budget_sufficient" in names
+

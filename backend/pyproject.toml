@@ -30,6 +30,9 @@ dev = [
 where = ["."]
 include = ["app*", "evals*"]
 
+[tool.setuptools.package-data]
+evals = ["cases/*.yaml"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]

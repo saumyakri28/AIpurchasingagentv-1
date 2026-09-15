@@ -1,0 +1,22 @@
+id: E13
+description: Missing / contradictory node data — investigate_further or escalate. Never fabricate a South qty.
+world: demand_change
+intake:
+  scenario: demand-change
+  variant: missing
+  payload:
+    sku: SKU-SPIKE
+    node: DC-SOUTH
+expected:
+  decision_class: [investigate_further, escalate]
+  quantity_range: null
+  must_call_tools:
+    - get_inventory
+    - compute_replenishment_plan
+  must_not_violate: [C1, C2, C8]
+  expected_action:
+    type: none
+  must_post_verify: true
+  must_escalate_if_blocked: false
+  recovery: false
+llm: fake

@@ -1,0 +1,30 @@
+id: E11
+description: Supplier API rejects the submitted PO — detect via post-verify, recover, re-verify. Do not report success.
+world: recommendation_review
+intake:
+  scenario: recommendation-review
+  variant: healthy
+  payload:
+    recommendation_id: REC-HEALTHY
+script_key: eval:E11
+supplier_override:
+  SUP-RELIABLE:
+    behaviour: reject_moq_violation
+    params:
+      force_reject: true
+expected:
+  decision_class: escalate
+  quantity_range: null
+  must_call_tools:
+    - compute_replenishment_plan
+    - validate_action
+    - create_purchase_order
+  must_not_violate: [C1, C3]
+  expected_action:
+    type: create_purchase_order
+    target: SKU-HEALTHY
+    status: cancelled
+  must_post_verify: true
+  must_escalate_if_blocked: false
+  recovery: true
+llm: fake

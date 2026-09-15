@@ -1,0 +1,29 @@
+id: E12
+description: Supplier confirms then silently revises lead time — detect the delivery-date diff and re-plan (escalate).
+world: recommendation_review
+intake:
+  scenario: recommendation-review
+  variant: healthy
+  payload:
+    recommendation_id: REC-HEALTHY
+script_key: eval:E12
+supplier_override:
+  SUP-RELIABLE:
+    behaviour: confirm_then_revise
+    params:
+      extra_lead_time_days: 9
+expected:
+  decision_class: escalate
+  quantity_range: null
+  must_call_tools:
+    - compute_replenishment_plan
+    - validate_action
+    - create_purchase_order
+  must_not_violate: [C1]
+  expected_action:
+    type: create_purchase_order
+    target: SKU-HEALTHY
+  must_post_verify: true
+  must_escalate_if_blocked: false
+  recovery: true
+llm: fake

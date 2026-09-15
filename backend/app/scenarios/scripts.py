@@ -278,6 +278,188 @@ def modify_storage() -> dict[str, Any]:
     }
 
 
+def accept_healthy() -> dict[str, Any]:
+    return {
+        "decision": "accept",
+        "final_quantity": 140,
+        "supplier_id": "SUP-RELIABLE",
+        "node": "DC-NORTH",
+        "expected_delivery_date": "2026-09-22",
+        "confidence": 0.88,
+        "reasoning_summary": (
+            "REC-HEALTHY 140 is feasible. compute_replenishment_plan rounded_qty is 100 at unit price 1.25. "
+            "validate_action passed for 140. Acme lead 7 days beats the stockout."
+        ),
+        "key_factors": [
+            _kf("rounded_qty", "100", "compute_replenishment_plan", "supports_lower"),
+            _kf("recommended_qty", "140", "get_recommendation", "supports_higher"),
+            _kf("validate_140", "passed", "validate_action", "supports_higher"),
+            _kf("unit_price", "1.25", "compute_replenishment_plan", "supports_lower"),
+        ],
+        "constraints_considered": [
+            "C1 budget_sufficient: 175 is inside the dry_goods envelope",
+            "C7 lead_time_beats_stockout: 7-day lead arrives 2026-09-22",
+            "C3 moq_satisfied: 140 >= 20",
+        ],
+        "alternatives_considered": [
+            {"option": "reject", "why_not": "cover would drop below the lead-time window"},
+            {"option": "buy 100", "why_not": "also valid; 140 matches the rec and still passes"},
+        ],
+        "expected_outcome": {
+            "po_status": "confirmed",
+            "ordered_qty": 140,
+            "committed_cost": 175.0,
+            "expected_delivery_date": "2026-09-22",
+        },
+        "requires_human_approval": False,
+    }
+
+
+def accept_shortfall_covered() -> dict[str, Any]:
+    return {
+        "decision": "accept",
+        "final_quantity": None,
+        "supplier_id": "SUP-RELIABLE",
+        "node": "DC-NORTH",
+        "confidence": 0.9,
+        "reasoning_summary": (
+            "PO-SHORTFALL confirmed 250 of 500. On-hand 2000 plus incoming 250 covers far past lead time. "
+            "compute_replenishment_plan net requirement is 0. The gap does not matter; I will not open a second PO."
+        ),
+        "key_factors": [
+            _kf("on_hand", "2000", "get_inventory", "supports_lower"),
+            _kf("confirmed_qty", "250 of 500", "get_open_purchase_orders", "supports_lower"),
+            _kf("net_requirement_raw", "0", "compute_replenishment_plan", "supports_lower"),
+        ],
+        "constraints_considered": [
+            "C8 no_redundant_coverage_with_open_pos: a top-up would be redundant",
+        ],
+        "alternatives_considered": [
+            {"option": "buy 250 from QuickShip", "why_not": "cover already holds; extra cost 5.20/unit is wasted"},
+        ],
+        "expected_outcome": {"po_status": "partially_confirmed", "ordered_qty": 500},
+        "requires_human_approval": False,
+    }
+
+
+def increase_spike() -> dict[str, Any]:
+    return {
+        "decision": "modify",
+        "final_quantity": 240,
+        "supplier_id": "SUP-RELIABLE",
+        "node": "DC-NORTH",
+        "expected_delivery_date": "2026-09-22",
+        "confidence": 0.72,
+        "reasoning_summary": (
+            "get_demand_stats.spike_detected is true and last-14d is a plateau, not a one-off. "
+            "The rec of 180 used a stale 18 u/day forecast. compute_replenishment_plan rounded 144 on that forecast. "
+            "I will raise to 240 (a multiple of 24) so cover tracks the new run-rate. validate_action passed for 240."
+        ),
+        "key_factors": [
+            _kf("spike_detected", "true", "get_demand_stats", "supports_higher"),
+            _kf("anomaly_flag", "false", "get_demand_stats", "supports_higher"),
+            _kf("forecast_daily", "18", "get_forecast", "supports_lower"),
+            _kf("rounded_qty_on_stale_fcst", "144", "compute_replenishment_plan", "supports_lower"),
+            _kf("validate_240", "passed", "validate_action", "supports_higher"),
+        ],
+        "constraints_considered": [
+            "C4 order_multiple_satisfied: 240 is a multiple of 24",
+            "C7 lead_time_beats_stockout: 7-day lead still clears stockout 2026-09-26",
+        ],
+        "alternatives_considered": [
+            {"option": "accept 180", "why_not": "not a multiple of 24 and based on fcst-v3.1"},
+            {"option": "buy 144", "why_not": "understates the step-change"},
+        ],
+        "expected_outcome": {
+            "po_status": "confirmed",
+            "ordered_qty": 240,
+            "committed_cost": 148.8,
+            "expected_delivery_date": "2026-09-22",
+        },
+        "requires_human_approval": False,
+    }
+
+
+def investigate_missing() -> dict[str, Any]:
+    return {
+        "decision": "investigate_further",
+        "final_quantity": None,
+        "confidence": 0.4,
+        "reasoning_summary": (
+            "get_inventory for SKU-SPIKE at DC-SOUTH returned EntityNotFound. "
+            "DC-NORTH has stock 220 but that is a different node. I will not fabricate a South qty."
+        ),
+        "key_factors": [
+            _kf("south_inventory", "EntityNotFound", "get_inventory", "blocking"),
+            _kf("north_on_hand", "220", "get_inventory", "supports_lower"),
+        ],
+        "constraints_considered": [
+            "C6 supplier_active_and_sells_product: unknown until a South position exists",
+        ],
+        "alternatives_considered": [
+            {"option": "buy 180 at DC-NORTH", "why_not": "intake node is DC-SOUTH; that would be guessing"},
+        ],
+        "expected_outcome": {},
+        "requires_human_approval": False,
+    }
+
+
+def recover_supplier_reject() -> dict[str, Any]:
+    return {
+        "decision": "escalate",
+        "final_quantity": None,
+        "supplier_id": "SUP-RELIABLE",
+        "node": "DC-NORTH",
+        "confidence": 0.45,
+        "reasoning_summary": (
+            "create_purchase_order submitted 140 but the supplier API rejected it; post-verify po_status is cancelled "
+            "not confirmed. I will not report success. Escalating to re-source or retry."
+        ),
+        "key_factors": [
+            _kf("po_status", "cancelled", "create_purchase_order", "blocking"),
+            _kf("post_verify", "mismatch", "create_purchase_order", "blocking"),
+        ],
+        "constraints_considered": [
+            "C3 moq_satisfied: we met MOQ 20; the reject was the mock API, not C3",
+        ],
+        "alternatives_considered": [
+            {"option": "retry same PO", "why_not": "supplier already cancelled"},
+            {"option": "switch to SUP-FAST", "why_not": "needs buyer because the first write failed"},
+        ],
+        "expected_outcome": {},
+        "requires_human_approval": True,
+        "approval_reason": "Supplier rejected a constraint-clean PO. Buyer should re-source.",
+    }
+
+
+def recover_lead_revise() -> dict[str, Any]:
+    return {
+        "decision": "escalate",
+        "final_quantity": None,
+        "supplier_id": "SUP-RELIABLE",
+        "node": "DC-NORTH",
+        "confidence": 0.42,
+        "reasoning_summary": (
+            "Supplier confirmed 140 then silently revised lead time. expected_delivery_date moved past 2026-09-22. "
+            "post-verify diffs the date. Re-plan is a buyer call because cover vs the new lead is no longer the contract I declared."
+        ),
+        "key_factors": [
+            _kf("expected_delivery_date", "2026-09-22", "create_purchase_order", "supports_higher"),
+            _kf("revised_after_confirm", "true", "create_purchase_order", "blocking"),
+        ],
+        "constraints_considered": [
+            "C7 lead_time_beats_stockout: must recompute after the silent lead-time revision",
+        ],
+        "alternatives_considered": [
+            {"option": "keep the late PO", "why_not": "not the lead time I validated"},
+            {"option": "expedite via SUP-FAST", "why_not": "needs approval after the first write already landed"},
+        ],
+        "expected_outcome": {},
+        "requires_human_approval": True,
+        "approval_reason": "Silent lead-time revision after confirm. Re-plan required.",
+    }
+
+
 SCRIPTS: dict[str, list[dict[str, Any]]] = {
     "recommendation-review:overbuy": [
         _plan(
@@ -289,6 +471,16 @@ SCRIPTS: dict[str, list[dict[str, Any]]] = {
             _call(5, "validate_action", sku="SKU-COVERED", node="DC-NORTH", supplier_id="SUP-RELIABLE", qty=800),
         ),
         _decide(reject_overbuy()),
+    ],
+    "recommendation-review:healthy": [
+        _plan(
+            "Plan: load REC-HEALTHY, inventory, replenishment, validate 140, then accept if it passes.",
+            _call(1, "get_recommendation", recommendation_id="REC-HEALTHY"),
+            _call(2, "get_inventory", sku="SKU-HEALTHY", node="DC-NORTH"),
+            _call(3, "compute_replenishment_plan", sku="SKU-HEALTHY", node="DC-NORTH", supplier_id="SUP-RELIABLE"),
+            _call(4, "validate_action", sku="SKU-HEALTHY", node="DC-NORTH", supplier_id="SUP-RELIABLE", qty=140),
+        ),
+        _decide(accept_healthy()),
     ],
     "recommendation-review:moq": [
         _plan(
@@ -314,6 +506,16 @@ SCRIPTS: dict[str, list[dict[str, Any]]] = {
         ),
         _decide(source_shortfall_bridge()),
     ],
+    "supplier-shortfall:covered": [
+        _plan(
+            "Plan: inspect the short, inventory and replenishment. If cover holds, accept the short.",
+            _call(1, "get_open_purchase_orders", sku="SKU-ALT", node="DC-NORTH"),
+            _call(2, "get_inventory", sku="SKU-ALT", node="DC-NORTH"),
+            _call(3, "get_forecast", sku="SKU-ALT", node="DC-NORTH", horizon_days=28),
+            _call(4, "compute_replenishment_plan", sku="SKU-ALT", node="DC-NORTH", supplier_id="SUP-RELIABLE"),
+        ),
+        _decide(accept_shortfall_covered()),
+    ],
     "demand-change:promo": [
         _plan(
             "Plan: demand stats vs sales history vs forecast; recompute cover; do not over-order a promo.",
@@ -322,7 +524,8 @@ SCRIPTS: dict[str, list[dict[str, Any]]] = {
             _call(3, "get_forecast", sku="SKU-PROMO", node="DC-NORTH", horizon_days=28),
             _call(4, "get_inventory", sku="SKU-PROMO", node="DC-NORTH"),
             _call(5, "get_open_purchase_orders", sku="SKU-PROMO", node="DC-NORTH"),
-            _call(6, "compute_replenishment_plan", sku="SKU-PROMO", node="DC-NORTH", supplier_id="SUP-RELIABLE"),
+            _call(6, "get_recommendation", recommendation_id="REC-PROMO"),
+            _call(7, "compute_replenishment_plan", sku="SKU-PROMO", node="DC-NORTH", supplier_id="SUP-RELIABLE"),
         ),
         _decide(reject_promo()),
     ],
@@ -336,6 +539,28 @@ SCRIPTS: dict[str, list[dict[str, Any]]] = {
             _call(5, "compute_replenishment_plan", sku="SKU-SPIKE", node="DC-NORTH", supplier_id="SUP-RELIABLE"),
         ),
         _decide(investigate_spike()),
+    ],
+    "demand-change:increase": [
+        _plan(
+            "Plan: confirm the spike is real, recompute, raise qty to a feasible multiple.",
+            _call(1, "get_demand_stats", sku="SKU-SPIKE", node="DC-NORTH", window_days=42),
+            _call(2, "get_sales_history", sku="SKU-SPIKE", node="DC-NORTH", days=28),
+            _call(3, "get_forecast", sku="SKU-SPIKE", node="DC-NORTH", horizon_days=28),
+            _call(4, "get_inventory", sku="SKU-SPIKE", node="DC-NORTH"),
+            _call(5, "compute_replenishment_plan", sku="SKU-SPIKE", node="DC-NORTH", supplier_id="SUP-RELIABLE"),
+            _call(6, "validate_action", sku="SKU-SPIKE", node="DC-NORTH", supplier_id="SUP-RELIABLE", qty=240),
+        ),
+        _decide(increase_spike()),
+    ],
+    "demand-change:missing": [
+        _plan(
+            "Plan: the intake node may have no position. Read before guessing a qty.",
+            _call(1, "get_inventory", sku="SKU-SPIKE", node="DC-SOUTH"),
+            _call(2, "get_inventory", sku="SKU-SPIKE", node="DC-NORTH"),
+            _call(3, "get_forecast", sku="SKU-SPIKE", node="DC-SOUTH", horizon_days=14),
+            _call(4, "compute_replenishment_plan", sku="SKU-SPIKE", node="DC-NORTH", supplier_id="SUP-RELIABLE"),
+        ),
+        _decide(investigate_missing()),
     ],
     "constrained-buy:budget": [
         _plan(
@@ -370,6 +595,28 @@ SCRIPTS: dict[str, list[dict[str, Any]]] = {
         ),
         _decide(modify_moq()),
         _decide(escalate_moq_blocked()),
+    ],
+    "eval:E11": [
+        _plan(
+            "Plan: accept REC-HEALTHY then post-verify the supplier response.",
+            _call(1, "get_recommendation", recommendation_id="REC-HEALTHY"),
+            _call(2, "get_inventory", sku="SKU-HEALTHY", node="DC-NORTH"),
+            _call(3, "compute_replenishment_plan", sku="SKU-HEALTHY", node="DC-NORTH", supplier_id="SUP-RELIABLE"),
+            _call(4, "validate_action", sku="SKU-HEALTHY", node="DC-NORTH", supplier_id="SUP-RELIABLE", qty=140),
+        ),
+        _decide(accept_healthy()),
+        _decide(recover_supplier_reject()),
+    ],
+    "eval:E12": [
+        _plan(
+            "Plan: accept REC-HEALTHY then watch the confirmed lead time.",
+            _call(1, "get_recommendation", recommendation_id="REC-HEALTHY"),
+            _call(2, "get_inventory", sku="SKU-HEALTHY", node="DC-NORTH"),
+            _call(3, "compute_replenishment_plan", sku="SKU-HEALTHY", node="DC-NORTH", supplier_id="SUP-RELIABLE"),
+            _call(4, "validate_action", sku="SKU-HEALTHY", node="DC-NORTH", supplier_id="SUP-RELIABLE", qty=140),
+        ),
+        _decide(accept_healthy()),
+        _decide(recover_lead_revise()),
     ],
 }
 

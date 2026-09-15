@@ -1,0 +1,4260 @@
+{
+  "id": "EV-20260915041847",
+  "kind": "harness",
+  "suite": "all",
+  "llm": "fake",
+  "repeat": 3,
+  "created_at": "2026-09-15T04:18:47Z",
+  "passed": true,
+  "cases_passed": 13,
+  "cases_total": 13,
+  "stability_mean": 1.0,
+  "assertions": [
+    {
+      "category": "decision_correctness",
+      "passed": true
+    },
+    {
+      "category": "information_sufficiency",
+      "passed": true
+    },
+    {
+      "category": "constraint_respect",
+      "passed": true
+    },
+    {
+      "category": "action_correctness",
+      "passed": true
+    },
+    {
+      "category": "validation_performed",
+      "passed": true
+    },
+    {
+      "category": "recovery",
+      "passed": true
+    },
+    {
+      "category": "explanation_quality",
+      "passed": true
+    }
+  ],
+  "cases": [
+    {
+      "id": "E1",
+      "description": "Recommendation is actually right \u2014 accept REC-HEALTHY.",
+      "world": "recommendation_review",
+      "passed": true,
+      "stability": 1.0,
+      "dimensions": {
+        "decision_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "information_sufficiency": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "constraint_respect": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "action_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "validation_performed": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "recovery": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "explanation_quality": {
+          "passed": true,
+          "pass_rate": 1.0
+        }
+      },
+      "assertions": [
+        {
+          "category": "decision_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "information_sufficiency",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "constraint_respect",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "action_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "validation_performed",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "recovery",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "explanation_quality",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        }
+      ],
+      "repeats": [
+        {
+          "id": "E1",
+          "description": "Recommendation is actually right \u2014 accept REC-HEALTHY.",
+          "trace_id": "TR-6cd45ab360",
+          "decision": "accept",
+          "status": "completed",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got accept allowed ['accept']; qty 140 in range",
+              "got": "accept",
+              "quantity": 140
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got accept allowed ['accept']; qty 140 in range"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E1",
+          "description": "Recommendation is actually right \u2014 accept REC-HEALTHY.",
+          "trace_id": "TR-04b39ff96f",
+          "decision": "accept",
+          "status": "completed",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got accept allowed ['accept']; qty 140 in range",
+              "got": "accept",
+              "quantity": 140
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got accept allowed ['accept']; qty 140 in range"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E1",
+          "description": "Recommendation is actually right \u2014 accept REC-HEALTHY.",
+          "trace_id": "TR-fe940e9723",
+          "decision": "accept",
+          "status": "completed",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got accept allowed ['accept']; qty 140 in range",
+              "got": "accept",
+              "quantity": 140
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got accept allowed ['accept']; qty 140 in range"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        }
+      ],
+      "decision": "accept"
+    },
+    {
+      "id": "E2",
+      "description": "Open PO already covers demand \u2014 reject REC-OVERBUY.",
+      "world": "recommendation_review",
+      "passed": true,
+      "stability": 1.0,
+      "dimensions": {
+        "decision_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "information_sufficiency": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "constraint_respect": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "action_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "validation_performed": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "recovery": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "explanation_quality": {
+          "passed": true,
+          "pass_rate": 1.0
+        }
+      },
+      "assertions": [
+        {
+          "category": "decision_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "information_sufficiency",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "constraint_respect",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "action_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "validation_performed",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "recovery",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "explanation_quality",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        }
+      ],
+      "repeats": [
+        {
+          "id": "E2",
+          "description": "Open PO already covers demand \u2014 reject REC-OVERBUY.",
+          "trace_id": "TR-72ec24e1ee",
+          "decision": "reject",
+          "status": "rejected",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got reject allowed ['reject']",
+              "got": "reject",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "no write"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got reject allowed ['reject']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "no write"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E2",
+          "description": "Open PO already covers demand \u2014 reject REC-OVERBUY.",
+          "trace_id": "TR-ff3e123593",
+          "decision": "reject",
+          "status": "rejected",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got reject allowed ['reject']",
+              "got": "reject",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "no write"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got reject allowed ['reject']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "no write"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E2",
+          "description": "Open PO already covers demand \u2014 reject REC-OVERBUY.",
+          "trace_id": "TR-da1d5eb130",
+          "decision": "reject",
+          "status": "rejected",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got reject allowed ['reject']",
+              "got": "reject",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "no write"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got reject allowed ['reject']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "no write"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        }
+      ],
+      "decision": "reject"
+    },
+    {
+      "id": "E3",
+      "description": "Need ~320 but MOQ 1000 \u2014 modify toward MOQ then escalate if C7/C12 block; state the cost of excess.",
+      "world": "recommendation_review",
+      "passed": true,
+      "stability": 1.0,
+      "dimensions": {
+        "decision_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "information_sufficiency": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "constraint_respect": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "action_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "validation_performed": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "recovery": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "explanation_quality": {
+          "passed": true,
+          "pass_rate": 1.0
+        }
+      },
+      "assertions": [
+        {
+          "category": "decision_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "information_sufficiency",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "constraint_respect",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "action_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "validation_performed",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "recovery",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "explanation_quality",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        }
+      ],
+      "repeats": [
+        {
+          "id": "E3",
+          "description": "Need ~320 but MOQ 1000 \u2014 modify toward MOQ then escalate if C7/C12 block; state the cost of excess.",
+          "trace_id": "TR-1aa3d1efac",
+          "decision": "escalate",
+          "status": "escalated",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got escalate allowed ['escalate', 'modify']",
+              "got": "escalate",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "escalate matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got escalate allowed ['escalate', 'modify']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "escalate matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E3",
+          "description": "Need ~320 but MOQ 1000 \u2014 modify toward MOQ then escalate if C7/C12 block; state the cost of excess.",
+          "trace_id": "TR-27b2928ef6",
+          "decision": "escalate",
+          "status": "escalated",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got escalate allowed ['escalate', 'modify']",
+              "got": "escalate",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "escalate matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got escalate allowed ['escalate', 'modify']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "escalate matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E3",
+          "description": "Need ~320 but MOQ 1000 \u2014 modify toward MOQ then escalate if C7/C12 block; state the cost of excess.",
+          "trace_id": "TR-cf781b3fa7",
+          "decision": "escalate",
+          "status": "escalated",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got escalate allowed ['escalate', 'modify']",
+              "got": "escalate",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "escalate matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got escalate allowed ['escalate', 'modify']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "escalate matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        }
+      ],
+      "decision": "escalate"
+    },
+    {
+      "id": "E4",
+      "description": "Budget insufficient \u2014 do not buy 400. suggested_max is 0 so escalate with an approval request (partial buy is not feasible).",
+      "world": "constrained_buy",
+      "passed": true,
+      "stability": 1.0,
+      "dimensions": {
+        "decision_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "information_sufficiency": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "constraint_respect": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "action_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "validation_performed": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "recovery": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "explanation_quality": {
+          "passed": true,
+          "pass_rate": 1.0
+        }
+      },
+      "assertions": [
+        {
+          "category": "decision_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "information_sufficiency",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "constraint_respect",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "action_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "validation_performed",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "recovery",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "explanation_quality",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        }
+      ],
+      "repeats": [
+        {
+          "id": "E4",
+          "description": "Budget insufficient \u2014 do not buy 400. suggested_max is 0 so escalate with an approval request (partial buy is not feasible).",
+          "trace_id": "TR-1363d3e30b",
+          "decision": "escalate",
+          "status": "escalated",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got escalate allowed ['escalate']",
+              "got": "escalate",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "escalate matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got escalate allowed ['escalate']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "escalate matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E4",
+          "description": "Budget insufficient \u2014 do not buy 400. suggested_max is 0 so escalate with an approval request (partial buy is not feasible).",
+          "trace_id": "TR-62c319bead",
+          "decision": "escalate",
+          "status": "escalated",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got escalate allowed ['escalate']",
+              "got": "escalate",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "escalate matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got escalate allowed ['escalate']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "escalate matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E4",
+          "description": "Budget insufficient \u2014 do not buy 400. suggested_max is 0 so escalate with an approval request (partial buy is not feasible).",
+          "trace_id": "TR-8deb38d50d",
+          "decision": "escalate",
+          "status": "escalated",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got escalate allowed ['escalate']",
+              "got": "escalate",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "escalate matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got escalate allowed ['escalate']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "escalate matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        }
+      ],
+      "decision": "escalate"
+    },
+    {
+      "id": "E5",
+      "description": "Storage full \u2014 reduce to suggested_max_feasible_qty 96. Do not execute 800.",
+      "world": "constrained_buy",
+      "passed": true,
+      "stability": 1.0,
+      "dimensions": {
+        "decision_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "information_sufficiency": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "constraint_respect": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "action_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "validation_performed": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "recovery": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "explanation_quality": {
+          "passed": true,
+          "pass_rate": 1.0
+        }
+      },
+      "assertions": [
+        {
+          "category": "decision_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "information_sufficiency",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "constraint_respect",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "action_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "validation_performed",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "recovery",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "explanation_quality",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        }
+      ],
+      "repeats": [
+        {
+          "id": "E5",
+          "description": "Storage full \u2014 reduce to suggested_max_feasible_qty 96. Do not execute 800.",
+          "trace_id": "TR-38bbe75585",
+          "decision": "modify",
+          "status": "completed",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got modify allowed ['modify']; qty 96 in range",
+              "got": "modify",
+              "quantity": 96
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got modify allowed ['modify']; qty 96 in range"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E5",
+          "description": "Storage full \u2014 reduce to suggested_max_feasible_qty 96. Do not execute 800.",
+          "trace_id": "TR-1a6467b120",
+          "decision": "modify",
+          "status": "completed",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got modify allowed ['modify']; qty 96 in range",
+              "got": "modify",
+              "quantity": 96
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got modify allowed ['modify']; qty 96 in range"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E5",
+          "description": "Storage full \u2014 reduce to suggested_max_feasible_qty 96. Do not execute 800.",
+          "trace_id": "TR-6bff4a9f4a",
+          "decision": "modify",
+          "status": "completed",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got modify allowed ['modify']; qty 96 in range",
+              "got": "modify",
+              "quantity": 96
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got modify allowed ['modify']; qty 96 in range"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        }
+      ],
+      "decision": "modify"
+    },
+    {
+      "id": "E6",
+      "description": "Lead time misses the stockout date \u2014 do not buy from Acme; escalate or switch to a faster supplier.",
+      "world": "recommendation_review",
+      "passed": true,
+      "stability": 1.0,
+      "dimensions": {
+        "decision_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "information_sufficiency": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "constraint_respect": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "action_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "validation_performed": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "recovery": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "explanation_quality": {
+          "passed": true,
+          "pass_rate": 1.0
+        }
+      },
+      "assertions": [
+        {
+          "category": "decision_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "information_sufficiency",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "constraint_respect",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "action_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "validation_performed",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "recovery",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "explanation_quality",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        }
+      ],
+      "repeats": [
+        {
+          "id": "E6",
+          "description": "Lead time misses the stockout date \u2014 do not buy from Acme; escalate or switch to a faster supplier.",
+          "trace_id": "TR-101aa52754",
+          "decision": "escalate",
+          "status": "escalated",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got escalate allowed ['escalate', 'modify']",
+              "got": "escalate",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "escalate matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got escalate allowed ['escalate', 'modify']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "escalate matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E6",
+          "description": "Lead time misses the stockout date \u2014 do not buy from Acme; escalate or switch to a faster supplier.",
+          "trace_id": "TR-9681d59737",
+          "decision": "escalate",
+          "status": "escalated",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got escalate allowed ['escalate', 'modify']",
+              "got": "escalate",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "escalate matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got escalate allowed ['escalate', 'modify']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "escalate matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E6",
+          "description": "Lead time misses the stockout date \u2014 do not buy from Acme; escalate or switch to a faster supplier.",
+          "trace_id": "TR-dd83256815",
+          "decision": "escalate",
+          "status": "escalated",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got escalate allowed ['escalate', 'modify']",
+              "got": "escalate",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "escalate matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got escalate allowed ['escalate', 'modify']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "escalate matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        }
+      ],
+      "decision": "escalate"
+    },
+    {
+      "id": "E7",
+      "description": "Supplier confirms 250 of 500 but inventory is sufficient \u2014 accept the short, no new PO.",
+      "world": "supplier_shortfall_covered",
+      "passed": true,
+      "stability": 1.0,
+      "dimensions": {
+        "decision_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "information_sufficiency": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "constraint_respect": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "action_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "validation_performed": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "recovery": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "explanation_quality": {
+          "passed": true,
+          "pass_rate": 1.0
+        }
+      },
+      "assertions": [
+        {
+          "category": "decision_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "information_sufficiency",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "constraint_respect",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "action_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "validation_performed",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "recovery",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "explanation_quality",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        }
+      ],
+      "repeats": [
+        {
+          "id": "E7",
+          "description": "Supplier confirms 250 of 500 but inventory is sufficient \u2014 accept the short, no new PO.",
+          "trace_id": "TR-4ee028142d",
+          "decision": "accept",
+          "status": "completed",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got accept allowed ['accept']",
+              "got": "accept",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "no write"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got accept allowed ['accept']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "no write"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E7",
+          "description": "Supplier confirms 250 of 500 but inventory is sufficient \u2014 accept the short, no new PO.",
+          "trace_id": "TR-40197273e8",
+          "decision": "accept",
+          "status": "completed",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got accept allowed ['accept']",
+              "got": "accept",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "no write"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got accept allowed ['accept']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "no write"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E7",
+          "description": "Supplier confirms 250 of 500 but inventory is sufficient \u2014 accept the short, no new PO.",
+          "trace_id": "TR-69b0997672",
+          "decision": "accept",
+          "status": "completed",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got accept allowed ['accept']",
+              "got": "accept",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "no write"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got accept allowed ['accept']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "no write"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        }
+      ],
+      "decision": "accept"
+    },
+    {
+      "id": "E8",
+      "description": "Supplier confirms 250 of 500 and inventory is insufficient \u2014 source remainder from QuickShip and post-verify combined cover.",
+      "world": "supplier_shortfall",
+      "passed": true,
+      "stability": 1.0,
+      "dimensions": {
+        "decision_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "information_sufficiency": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "constraint_respect": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "action_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "validation_performed": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "recovery": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "explanation_quality": {
+          "passed": true,
+          "pass_rate": 1.0
+        }
+      },
+      "assertions": [
+        {
+          "category": "decision_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "information_sufficiency",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "constraint_respect",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "action_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "validation_performed",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "recovery",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "explanation_quality",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        }
+      ],
+      "repeats": [
+        {
+          "id": "E8",
+          "description": "Supplier confirms 250 of 500 and inventory is insufficient \u2014 source remainder from QuickShip and post-verify combined cover.",
+          "trace_id": "TR-c9fd839d0f",
+          "decision": "modify",
+          "status": "completed",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got modify allowed ['modify']; qty 80 in range",
+              "got": "modify",
+              "quantity": 80
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got modify allowed ['modify']; qty 80 in range"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E8",
+          "description": "Supplier confirms 250 of 500 and inventory is insufficient \u2014 source remainder from QuickShip and post-verify combined cover.",
+          "trace_id": "TR-d510094961",
+          "decision": "modify",
+          "status": "completed",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got modify allowed ['modify']; qty 80 in range",
+              "got": "modify",
+              "quantity": 80
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got modify allowed ['modify']; qty 80 in range"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E8",
+          "description": "Supplier confirms 250 of 500 and inventory is insufficient \u2014 source remainder from QuickShip and post-verify combined cover.",
+          "trace_id": "TR-6d00b5945e",
+          "decision": "modify",
+          "status": "completed",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got modify allowed ['modify']; qty 80 in range",
+              "got": "modify",
+              "quantity": 80
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got modify allowed ['modify']; qty 80 in range"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        }
+      ],
+      "decision": "modify"
+    },
+    {
+      "id": "E9",
+      "description": "Real demand spike \u2014 increase qty (do not keep the stale 180 rec).",
+      "world": "demand_change",
+      "passed": true,
+      "stability": 1.0,
+      "dimensions": {
+        "decision_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "information_sufficiency": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "constraint_respect": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "action_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "validation_performed": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "recovery": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "explanation_quality": {
+          "passed": true,
+          "pass_rate": 1.0
+        }
+      },
+      "assertions": [
+        {
+          "category": "decision_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "information_sufficiency",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "constraint_respect",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "action_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "validation_performed",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "recovery",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "explanation_quality",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        }
+      ],
+      "repeats": [
+        {
+          "id": "E9",
+          "description": "Real demand spike \u2014 increase qty (do not keep the stale 180 rec).",
+          "trace_id": "TR-d20b3f89eb",
+          "decision": "modify",
+          "status": "completed",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got modify allowed ['modify']; qty 240 in range",
+              "got": "modify",
+              "quantity": 240
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got modify allowed ['modify']; qty 240 in range"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E9",
+          "description": "Real demand spike \u2014 increase qty (do not keep the stale 180 rec).",
+          "trace_id": "TR-0e16ab932e",
+          "decision": "modify",
+          "status": "completed",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got modify allowed ['modify']; qty 240 in range",
+              "got": "modify",
+              "quantity": 240
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got modify allowed ['modify']; qty 240 in range"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E9",
+          "description": "Real demand spike \u2014 increase qty (do not keep the stale 180 rec).",
+          "trace_id": "TR-7f820af8c0",
+          "decision": "modify",
+          "status": "completed",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got modify allowed ['modify']; qty 240 in range",
+              "got": "modify",
+              "quantity": 240
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got modify allowed ['modify']; qty 240 in range"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        }
+      ],
+      "decision": "modify"
+    },
+    {
+      "id": "E10",
+      "description": "Promo-driven one-off spike \u2014 do NOT increase. Anti-overreaction.",
+      "world": "demand_change",
+      "passed": true,
+      "stability": 1.0,
+      "dimensions": {
+        "decision_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "information_sufficiency": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "constraint_respect": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "action_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "validation_performed": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "recovery": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "explanation_quality": {
+          "passed": true,
+          "pass_rate": 1.0
+        }
+      },
+      "assertions": [
+        {
+          "category": "decision_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "information_sufficiency",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "constraint_respect",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "action_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "validation_performed",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "recovery",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "explanation_quality",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        }
+      ],
+      "repeats": [
+        {
+          "id": "E10",
+          "description": "Promo-driven one-off spike \u2014 do NOT increase. Anti-overreaction.",
+          "trace_id": "TR-527a7d14fa",
+          "decision": "reject",
+          "status": "rejected",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got reject allowed ['reject']",
+              "got": "reject",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "no write"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got reject allowed ['reject']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "no write"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E10",
+          "description": "Promo-driven one-off spike \u2014 do NOT increase. Anti-overreaction.",
+          "trace_id": "TR-e4d5d43ef0",
+          "decision": "reject",
+          "status": "rejected",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got reject allowed ['reject']",
+              "got": "reject",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "no write"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got reject allowed ['reject']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "no write"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E10",
+          "description": "Promo-driven one-off spike \u2014 do NOT increase. Anti-overreaction.",
+          "trace_id": "TR-52e2b42292",
+          "decision": "reject",
+          "status": "rejected",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got reject allowed ['reject']",
+              "got": "reject",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "no write"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got reject allowed ['reject']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "no write"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        }
+      ],
+      "decision": "reject"
+    },
+    {
+      "id": "E11",
+      "description": "Supplier API rejects the submitted PO \u2014 detect via post-verify, recover, re-verify. Do not report success.",
+      "world": "recommendation_review",
+      "passed": true,
+      "stability": 1.0,
+      "dimensions": {
+        "decision_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "information_sufficiency": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "constraint_respect": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "action_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "validation_performed": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "recovery": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "explanation_quality": {
+          "passed": true,
+          "pass_rate": 1.0
+        }
+      },
+      "assertions": [
+        {
+          "category": "decision_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "information_sufficiency",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "constraint_respect",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "action_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "validation_performed",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "recovery",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "explanation_quality",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        }
+      ],
+      "repeats": [
+        {
+          "id": "E11",
+          "description": "Supplier API rejects the submitted PO \u2014 detect via post-verify, recover, re-verify. Do not report success.",
+          "trace_id": "TR-d43eecc159",
+          "decision": "escalate",
+          "status": "escalated",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got escalate allowed ['escalate']",
+              "got": "escalate",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "detected mismatch and compensated / escalated",
+              "detected": true,
+              "matched": true
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got escalate allowed ['escalate']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "detected mismatch and compensated / escalated"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E11",
+          "description": "Supplier API rejects the submitted PO \u2014 detect via post-verify, recover, re-verify. Do not report success.",
+          "trace_id": "TR-d58289900a",
+          "decision": "escalate",
+          "status": "escalated",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got escalate allowed ['escalate']",
+              "got": "escalate",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "detected mismatch and compensated / escalated",
+              "detected": true,
+              "matched": true
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got escalate allowed ['escalate']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "detected mismatch and compensated / escalated"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E11",
+          "description": "Supplier API rejects the submitted PO \u2014 detect via post-verify, recover, re-verify. Do not report success.",
+          "trace_id": "TR-a66b19d9b0",
+          "decision": "escalate",
+          "status": "escalated",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got escalate allowed ['escalate']",
+              "got": "escalate",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "detected mismatch and compensated / escalated",
+              "detected": true,
+              "matched": true
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got escalate allowed ['escalate']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "detected mismatch and compensated / escalated"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        }
+      ],
+      "decision": "escalate"
+    },
+    {
+      "id": "E12",
+      "description": "Supplier confirms then silently revises lead time \u2014 detect the delivery-date diff and re-plan (escalate).",
+      "world": "recommendation_review",
+      "passed": true,
+      "stability": 1.0,
+      "dimensions": {
+        "decision_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "information_sufficiency": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "constraint_respect": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "action_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "validation_performed": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "recovery": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "explanation_quality": {
+          "passed": true,
+          "pass_rate": 1.0
+        }
+      },
+      "assertions": [
+        {
+          "category": "decision_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "information_sufficiency",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "constraint_respect",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "action_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "validation_performed",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "recovery",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "explanation_quality",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        }
+      ],
+      "repeats": [
+        {
+          "id": "E12",
+          "description": "Supplier confirms then silently revises lead time \u2014 detect the delivery-date diff and re-plan (escalate).",
+          "trace_id": "TR-4842ef009b",
+          "decision": "escalate",
+          "status": "escalated",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got escalate allowed ['escalate']",
+              "got": "escalate",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "detected mismatch and compensated / escalated",
+              "detected": true,
+              "matched": true
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got escalate allowed ['escalate']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "detected mismatch and compensated / escalated"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E12",
+          "description": "Supplier confirms then silently revises lead time \u2014 detect the delivery-date diff and re-plan (escalate).",
+          "trace_id": "TR-6a5fe5f7df",
+          "decision": "escalate",
+          "status": "escalated",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got escalate allowed ['escalate']",
+              "got": "escalate",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "detected mismatch and compensated / escalated",
+              "detected": true,
+              "matched": true
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got escalate allowed ['escalate']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "detected mismatch and compensated / escalated"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E12",
+          "description": "Supplier confirms then silently revises lead time \u2014 detect the delivery-date diff and re-plan (escalate).",
+          "trace_id": "TR-c914eccfd4",
+          "decision": "escalate",
+          "status": "escalated",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got escalate allowed ['escalate']",
+              "got": "escalate",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "detected mismatch and compensated / escalated",
+              "detected": true,
+              "matched": true
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got escalate allowed ['escalate']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "create_purchase_order matched"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "detected mismatch and compensated / escalated"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        }
+      ],
+      "decision": "escalate"
+    },
+    {
+      "id": "E13",
+      "description": "Missing / contradictory node data \u2014 investigate_further or escalate. Never fabricate a South qty.",
+      "world": "demand_change",
+      "passed": true,
+      "stability": 1.0,
+      "dimensions": {
+        "decision_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "information_sufficiency": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "constraint_respect": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "action_correctness": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "validation_performed": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "recovery": {
+          "passed": true,
+          "pass_rate": 1.0
+        },
+        "explanation_quality": {
+          "passed": true,
+          "pass_rate": 1.0
+        }
+      },
+      "assertions": [
+        {
+          "category": "decision_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "information_sufficiency",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "constraint_respect",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "action_correctness",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "validation_performed",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "recovery",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        },
+        {
+          "category": "explanation_quality",
+          "passed": true,
+          "notes": "pass_rate=1.00"
+        }
+      ],
+      "repeats": [
+        {
+          "id": "E13",
+          "description": "Missing / contradictory node data \u2014 investigate_further or escalate. Never fabricate a South qty.",
+          "trace_id": "TR-9de096180a",
+          "decision": "investigate_further",
+          "status": "investigate_further",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got investigate_further allowed ['escalate', 'investigate_further']",
+              "got": "investigate_further",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "no write"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got investigate_further allowed ['escalate', 'investigate_further']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "no write"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E13",
+          "description": "Missing / contradictory node data \u2014 investigate_further or escalate. Never fabricate a South qty.",
+          "trace_id": "TR-f103382b72",
+          "decision": "investigate_further",
+          "status": "investigate_further",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got investigate_further allowed ['escalate', 'investigate_further']",
+              "got": "investigate_further",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "no write"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got investigate_further allowed ['escalate', 'investigate_further']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "no write"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        },
+        {
+          "id": "E13",
+          "description": "Missing / contradictory node data \u2014 investigate_further or escalate. Never fabricate a South qty.",
+          "trace_id": "TR-5b156303ac",
+          "decision": "investigate_further",
+          "status": "investigate_further",
+          "passed": true,
+          "dimensions": {
+            "decision_correctness": {
+              "passed": true,
+              "notes": "got investigate_further allowed ['escalate', 'investigate_further']",
+              "got": "investigate_further",
+              "quantity": null
+            },
+            "information_sufficiency": {
+              "passed": true,
+              "notes": "required tools present before the decision",
+              "missing": [],
+              "late": []
+            },
+            "constraint_respect": {
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold",
+              "violations": []
+            },
+            "action_correctness": {
+              "passed": true,
+              "notes": "no write"
+            },
+            "validation_performed": {
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            "recovery": {
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            "explanation_quality": {
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result",
+              "uncited_numbers": []
+            }
+          },
+          "assertions": [
+            {
+              "category": "decision_correctness",
+              "passed": true,
+              "notes": "got investigate_further allowed ['escalate', 'investigate_further']"
+            },
+            {
+              "category": "information_sufficiency",
+              "passed": true,
+              "notes": "required tools present before the decision"
+            },
+            {
+              "category": "constraint_respect",
+              "passed": true,
+              "notes": "budgets, storage and executed PO lines hold"
+            },
+            {
+              "category": "action_correctness",
+              "passed": true,
+              "notes": "no write"
+            },
+            {
+              "category": "validation_performed",
+              "passed": true,
+              "notes": "pre-validation and post-verify reports present"
+            },
+            {
+              "category": "recovery",
+              "passed": true,
+              "notes": "not a failure-injection case"
+            },
+            {
+              "category": "explanation_quality",
+              "passed": true,
+              "notes": "all cited numbers appear in a tool result"
+            }
+          ],
+          "error": null
+        }
+      ],
+      "decision": "investigate_further"
+    }
+  ],
+  "status": "passed",
+  "decision": null,
+  "scenario_type": "eval_suite",
+  "matched": null,
+  "markdown": "# Purchasing agent eval report\n\nEach column is a separate grader. There is no single opaque score.\nStability is the share of repeats that matched the modal (decision, pass-vector).\n\n- id: `EV-20260915041847`\n- llm: `fake`\n- suite: `all`\n- repeat: 3\n- created: 2026-09-15T04:18:47Z\n- cases passed: 13/13\n- mean stability: 1.0\n\n| Case | Decision | Info | Constraint | Action | Validation | Recovery | Explain | Stability | Overall |\n| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |\n| E1 | pass | pass | pass | pass | pass | pass | pass | 1.0 | pass |\n| E2 | pass | pass | pass | pass | pass | pass | pass | 1.0 | pass |\n| E3 | pass | pass | pass | pass | pass | pass | pass | 1.0 | pass |\n| E4 | pass | pass | pass | pass | pass | pass | pass | 1.0 | pass |\n| E5 | pass | pass | pass | pass | pass | pass | pass | 1.0 | pass |\n| E6 | pass | pass | pass | pass | pass | pass | pass | 1.0 | pass |\n| E7 | pass | pass | pass | pass | pass | pass | pass | 1.0 | pass |\n| E8 | pass | pass | pass | pass | pass | pass | pass | 1.0 | pass |\n| E9 | pass | pass | pass | pass | pass | pass | pass | 1.0 | pass |\n| E10 | pass | pass | pass | pass | pass | pass | pass | 1.0 | pass |\n| E11 | pass | pass | pass | pass | pass | pass | pass | 1.0 | pass |\n| E12 | pass | pass | pass | pass | pass | pass | pass | 1.0 | pass |\n| E13 | pass | pass | pass | pass | pass | pass | pass | 1.0 | pass |\n\n## Case notes\n\n### E1 \u2014 Recommendation is actually right \u2014 accept REC-HEALTHY.\n\nDecision: `accept` \u00b7 stability 1.0\n\n- **Decision**: pass (pass_rate=1.0) \u2014 got accept allowed ['accept']; qty 140 in range\n- **Info**: pass (pass_rate=1.0) \u2014 required tools present before the decision\n- **Constraint**: pass (pass_rate=1.0) \u2014 budgets, storage and executed PO lines hold\n- **Action**: pass (pass_rate=1.0) \u2014 create_purchase_order matched\n- **Validation**: pass (pass_rate=1.0) \u2014 pre-validation and post-verify reports present\n- **Recovery**: pass (pass_rate=1.0) \u2014 not a failure-injection case\n- **Explain**: pass (pass_rate=1.0) \u2014 all cited numbers appear in a tool result\n\n### E2 \u2014 Open PO already covers demand \u2014 reject REC-OVERBUY.\n\nDecision: `reject` \u00b7 stability 1.0\n\n- **Decision**: pass (pass_rate=1.0) \u2014 got reject allowed ['reject']\n- **Info**: pass (pass_rate=1.0) \u2014 required tools present before the decision\n- **Constraint**: pass (pass_rate=1.0) \u2014 budgets, storage and executed PO lines hold\n- **Action**: pass (pass_rate=1.0) \u2014 no write\n- **Validation**: pass (pass_rate=1.0) \u2014 pre-validation and post-verify reports present\n- **Recovery**: pass (pass_rate=1.0) \u2014 not a failure-injection case\n- **Explain**: pass (pass_rate=1.0) \u2014 all cited numbers appear in a tool result\n\n### E3 \u2014 Need ~320 but MOQ 1000 \u2014 modify toward MOQ then escalate if C7/C12 block; state the cost of excess.\n\nDecision: `escalate` \u00b7 stability 1.0\n\n- **Decision**: pass (pass_rate=1.0) \u2014 got escalate allowed ['escalate', 'modify']\n- **Info**: pass (pass_rate=1.0) \u2014 required tools present before the decision\n- **Constraint**: pass (pass_rate=1.0) \u2014 budgets, storage and executed PO lines hold\n- **Action**: pass (pass_rate=1.0) \u2014 escalate matched\n- **Validation**: pass (pass_rate=1.0) \u2014 pre-validation and post-verify reports present\n- **Recovery**: pass (pass_rate=1.0) \u2014 not a failure-injection case\n- **Explain**: pass (pass_rate=1.0) \u2014 all cited numbers appear in a tool result\n\n### E4 \u2014 Budget insufficient \u2014 do not buy 400. suggested_max is 0 so escalate with an approval request (partial buy is not feasible).\n\nDecision: `escalate` \u00b7 stability 1.0\n\n- **Decision**: pass (pass_rate=1.0) \u2014 got escalate allowed ['escalate']\n- **Info**: pass (pass_rate=1.0) \u2014 required tools present before the decision\n- **Constraint**: pass (pass_rate=1.0) \u2014 budgets, storage and executed PO lines hold\n- **Action**: pass (pass_rate=1.0) \u2014 escalate matched\n- **Validation**: pass (pass_rate=1.0) \u2014 pre-validation and post-verify reports present\n- **Recovery**: pass (pass_rate=1.0) \u2014 not a failure-injection case\n- **Explain**: pass (pass_rate=1.0) \u2014 all cited numbers appear in a tool result\n\n### E5 \u2014 Storage full \u2014 reduce to suggested_max_feasible_qty 96. Do not execute 800.\n\nDecision: `modify` \u00b7 stability 1.0\n\n- **Decision**: pass (pass_rate=1.0) \u2014 got modify allowed ['modify']; qty 96 in range\n- **Info**: pass (pass_rate=1.0) \u2014 required tools present before the decision\n- **Constraint**: pass (pass_rate=1.0) \u2014 budgets, storage and executed PO lines hold\n- **Action**: pass (pass_rate=1.0) \u2014 create_purchase_order matched\n- **Validation**: pass (pass_rate=1.0) \u2014 pre-validation and post-verify reports present\n- **Recovery**: pass (pass_rate=1.0) \u2014 not a failure-injection case\n- **Explain**: pass (pass_rate=1.0) \u2014 all cited numbers appear in a tool result\n\n### E6 \u2014 Lead time misses the stockout date \u2014 do not buy from Acme; escalate or switch to a faster supplier.\n\nDecision: `escalate` \u00b7 stability 1.0\n\n- **Decision**: pass (pass_rate=1.0) \u2014 got escalate allowed ['escalate', 'modify']\n- **Info**: pass (pass_rate=1.0) \u2014 required tools present before the decision\n- **Constraint**: pass (pass_rate=1.0) \u2014 budgets, storage and executed PO lines hold\n- **Action**: pass (pass_rate=1.0) \u2014 escalate matched\n- **Validation**: pass (pass_rate=1.0) \u2014 pre-validation and post-verify reports present\n- **Recovery**: pass (pass_rate=1.0) \u2014 not a failure-injection case\n- **Explain**: pass (pass_rate=1.0) \u2014 all cited numbers appear in a tool result\n\n### E7 \u2014 Supplier confirms 250 of 500 but inventory is sufficient \u2014 accept the short, no new PO.\n\nDecision: `accept` \u00b7 stability 1.0\n\n- **Decision**: pass (pass_rate=1.0) \u2014 got accept allowed ['accept']\n- **Info**: pass (pass_rate=1.0) \u2014 required tools present before the decision\n- **Constraint**: pass (pass_rate=1.0) \u2014 budgets, storage and executed PO lines hold\n- **Action**: pass (pass_rate=1.0) \u2014 no write\n- **Validation**: pass (pass_rate=1.0) \u2014 pre-validation and post-verify reports present\n- **Recovery**: pass (pass_rate=1.0) \u2014 not a failure-injection case\n- **Explain**: pass (pass_rate=1.0) \u2014 all cited numbers appear in a tool result\n\n### E8 \u2014 Supplier confirms 250 of 500 and inventory is insufficient \u2014 source remainder from QuickShip and post-verify combined cover.\n\nDecision: `modify` \u00b7 stability 1.0\n\n- **Decision**: pass (pass_rate=1.0) \u2014 got modify allowed ['modify']; qty 80 in range\n- **Info**: pass (pass_rate=1.0) \u2014 required tools present before the decision\n- **Constraint**: pass (pass_rate=1.0) \u2014 budgets, storage and executed PO lines hold\n- **Action**: pass (pass_rate=1.0) \u2014 create_purchase_order matched\n- **Validation**: pass (pass_rate=1.0) \u2014 pre-validation and post-verify reports present\n- **Recovery**: pass (pass_rate=1.0) \u2014 not a failure-injection case\n- **Explain**: pass (pass_rate=1.0) \u2014 all cited numbers appear in a tool result\n\n### E9 \u2014 Real demand spike \u2014 increase qty (do not keep the stale 180 rec).\n\nDecision: `modify` \u00b7 stability 1.0\n\n- **Decision**: pass (pass_rate=1.0) \u2014 got modify allowed ['modify']; qty 240 in range\n- **Info**: pass (pass_rate=1.0) \u2014 required tools present before the decision\n- **Constraint**: pass (pass_rate=1.0) \u2014 budgets, storage and executed PO lines hold\n- **Action**: pass (pass_rate=1.0) \u2014 create_purchase_order matched\n- **Validation**: pass (pass_rate=1.0) \u2014 pre-validation and post-verify reports present\n- **Recovery**: pass (pass_rate=1.0) \u2014 not a failure-injection case\n- **Explain**: pass (pass_rate=1.0) \u2014 all cited numbers appear in a tool result\n\n### E10 \u2014 Promo-driven one-off spike \u2014 do NOT increase. Anti-overreaction.\n\nDecision: `reject` \u00b7 stability 1.0\n\n- **Decision**: pass (pass_rate=1.0) \u2014 got reject allowed ['reject']\n- **Info**: pass (pass_rate=1.0) \u2014 required tools present before the decision\n- **Constraint**: pass (pass_rate=1.0) \u2014 budgets, storage and executed PO lines hold\n- **Action**: pass (pass_rate=1.0) \u2014 no write\n- **Validation**: pass (pass_rate=1.0) \u2014 pre-validation and post-verify reports present\n- **Recovery**: pass (pass_rate=1.0) \u2014 not a failure-injection case\n- **Explain**: pass (pass_rate=1.0) \u2014 all cited numbers appear in a tool result\n\n### E11 \u2014 Supplier API rejects the submitted PO \u2014 detect via post-verify, recover, re-verify. Do not report success.\n\nDecision: `escalate` \u00b7 stability 1.0\n\n- **Decision**: pass (pass_rate=1.0) \u2014 got escalate allowed ['escalate']\n- **Info**: pass (pass_rate=1.0) \u2014 required tools present before the decision\n- **Constraint**: pass (pass_rate=1.0) \u2014 budgets, storage and executed PO lines hold\n- **Action**: pass (pass_rate=1.0) \u2014 create_purchase_order matched\n- **Validation**: pass (pass_rate=1.0) \u2014 pre-validation and post-verify reports present\n- **Recovery**: pass (pass_rate=1.0) \u2014 detected mismatch and compensated / escalated\n- **Explain**: pass (pass_rate=1.0) \u2014 all cited numbers appear in a tool result\n\n### E12 \u2014 Supplier confirms then silently revises lead time \u2014 detect the delivery-date diff and re-plan (escalate).\n\nDecision: `escalate` \u00b7 stability 1.0\n\n- **Decision**: pass (pass_rate=1.0) \u2014 got escalate allowed ['escalate']\n- **Info**: pass (pass_rate=1.0) \u2014 required tools present before the decision\n- **Constraint**: pass (pass_rate=1.0) \u2014 budgets, storage and executed PO lines hold\n- **Action**: pass (pass_rate=1.0) \u2014 create_purchase_order matched\n- **Validation**: pass (pass_rate=1.0) \u2014 pre-validation and post-verify reports present\n- **Recovery**: pass (pass_rate=1.0) \u2014 detected mismatch and compensated / escalated\n- **Explain**: pass (pass_rate=1.0) \u2014 all cited numbers appear in a tool result\n\n### E13 \u2014 Missing / contradictory node data \u2014 investigate_further or escalate. Never fabricate a South qty.\n\nDecision: `investigate_further` \u00b7 stability 1.0\n\n- **Decision**: pass (pass_rate=1.0) \u2014 got investigate_further allowed ['escalate', 'investigate_further']\n- **Info**: pass (pass_rate=1.0) \u2014 required tools present before the decision\n- **Constraint**: pass (pass_rate=1.0) \u2014 budgets, storage and executed PO lines hold\n- **Action**: pass (pass_rate=1.0) \u2014 no write\n- **Validation**: pass (pass_rate=1.0) \u2014 pre-validation and post-verify reports present\n- **Recovery**: pass (pass_rate=1.0) \u2014 not a failure-injection case\n- **Explain**: pass (pass_rate=1.0) \u2014 all cited numbers appear in a tool result\n\n"
+}

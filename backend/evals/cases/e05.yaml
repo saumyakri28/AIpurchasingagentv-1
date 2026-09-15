@@ -1,0 +1,25 @@
+id: E5
+description: Storage full — reduce to suggested_max_feasible_qty 96. Do not execute 800.
+world: constrained_buy
+intake:
+  scenario: constrained-buy
+  variant: storage
+  payload:
+    sku: SKU-STORAGE
+    node: DC-SOUTH
+expected:
+  decision_class: modify
+  quantity_range: [96, 96]
+  must_call_tools:
+    - get_storage_capacity
+    - compute_replenishment_plan
+    - validate_action
+  must_not_violate: [C2, C3]
+  expected_action:
+    type: create_purchase_order
+    target: SKU-STORAGE
+    status: confirmed
+  must_post_verify: true
+  must_escalate_if_blocked: true
+  recovery: false
+llm: fake

@@ -356,6 +356,8 @@ class AgentLoop:
             approval = self.db.get(ApprovalRequest, approval_id)
             if approval is not None:
                 approval.trace_id = self.trace_id
+                if decision.alternatives_considered:
+                    approval.options_considered = [a.model_dump() for a in decision.alternatives_considered]
                 self.db.commit()
         return result if isinstance(result, dict) else {"result": result}
 
@@ -644,7 +646,9 @@ class AgentLoop:
         node = decision.node or intake.get("node")
         supplier_id = decision.supplier_id or intake.get("supplier_id")
         qty = decision.final_quantity
-        if not (sku and node and supplier_id and qty):
+        if not qty:
+            return None
+        if not (sku and node and supplier_id):
             return (
                 "escalate",
                 {

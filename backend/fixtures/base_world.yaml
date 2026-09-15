@@ -328,7 +328,7 @@ inventory:
     last_counted_at: 2026-09-13T07:00:00
   - product_id: prod-healthy
     node_id: DC-NORTH
-    on_hand: 40
+    on_hand: 100
     reserved: 0
     in_transit: 0
     damaged: 0

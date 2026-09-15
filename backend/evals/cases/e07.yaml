@@ -1,0 +1,25 @@
+id: E7
+description: Supplier confirms 250 of 500 but inventory is sufficient — accept the short, no new PO.
+world: supplier_shortfall_covered
+intake:
+  scenario: supplier-shortfall
+  variant: covered
+  payload:
+    po_id: PO-SHORTFALL
+    confirmed_qty: 250
+    sku: SKU-ALT
+    node: DC-NORTH
+expected:
+  decision_class: accept
+  quantity_range: null
+  must_call_tools:
+    - get_open_purchase_orders
+    - get_inventory
+    - compute_replenishment_plan
+  must_not_violate: [C8]
+  expected_action:
+    type: none
+  must_post_verify: true
+  must_escalate_if_blocked: false
+  recovery: false
+llm: fake

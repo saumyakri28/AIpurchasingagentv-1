@@ -129,6 +129,52 @@ def _apply_supplier_result(po: PurchaseOrder, result, requested_lead: int) -> No
     po.expected_delivery_date = FROZEN_TODAY + timedelta(days=int(lead))
 
 
+def submit_pending_purchase_order(po: PurchaseOrder, *, db: Session) -> dict[str, Any]:
+    """Move a pending_approval PO to the supplier. Used by the human-approval path."""
+    if po.status != POStatus.PENDING_APPROVAL.value:
+        raise ValueError(f"PO {po.id} is {po.status}, not pending_approval")
+    if not po.lines:
+        raise ValueError(f"PO {po.id} has no lines")
+    product = db.get(Product, po.lines[0].product_id)
+    if product is None:
+        raise EntityNotFound("product", po.lines[0].product_id)
+    action = assemble_proposed_action(
+        db,
+        sku=product.sku,
+        node=po.node_id,
+        supplier_id=po.supplier_id,
+        qty=sum(line.ordered_qty for line in po.lines),
+        exclude_po_id=po.id,
+    )
+    _evaluate_or_refuse(action)
+    for line in po.lines:
+        category = _line_category(db, line.product_id)
+        _budget_add(db, po.node_id, category, line.ordered_qty * line.unit_price)
+    po.status = POStatus.SUBMITTED.value
+    result = supplier_api.submit_order(
+        po.supplier_id,
+        {
+            "lines": [{"ordered_qty": line.ordered_qty} for line in po.lines],
+            "ordered_qty": sum(line.ordered_qty for line in po.lines),
+            "lead_time_days": action.lead_time_days,
+            "moq_units": action.moq_units,
+        },
+        db=db,
+    )
+    _apply_supplier_result(po, result, action.lead_time_days)
+    if po.status == POStatus.CANCELLED.value:
+        for line in po.lines:
+            _budget_add(db, po.node_id, _line_category(db, line.product_id), -(line.ordered_qty * line.unit_price))
+    _log(
+        db,
+        "po_approved",
+        "purchase_order",
+        po.id,
+        {"status": po.status, "supplier": result.model_dump(mode="json")},
+    )
+    return {"po": serialize_po(po), "supplier": result.model_dump(mode="json"), "status": po.status}
+
+
 @tool(
     "create_purchase_order",
     "Create a PO. Pre-validated; blocked constraints refuse. Over-envelope POs go pending_approval.",
@@ -218,9 +264,10 @@ def create_purchase_order(args: CreatePOArgs, *, db: Session, policy: AutonomyPo
                 _budget_add(db, args.node, category, -(qty * price))
 
     if decision.requires_approval:
+        approval_id = _new_id("APR")
         db.add(
             ApprovalRequest(
-                id=_new_id("APR"),
+                id=approval_id,
                 action_payload={"tool": "create_purchase_order", "po_id": po.id, **args.model_dump(mode="json")},
                 reason="; ".join(decision.reasons) + f" | {args.justification}",
                 urgency="normal",
@@ -228,6 +275,8 @@ def create_purchase_order(args: CreatePOArgs, *, db: Session, policy: AutonomyPo
                 created_at=FROZEN_NOW,
             )
         )
+    else:
+        approval_id = None
 
     _log(
         db,
@@ -248,6 +297,7 @@ def create_purchase_order(args: CreatePOArgs, *, db: Session, policy: AutonomyPo
         "requires_human_approval": decision.requires_approval,
         "policy_reasons": decision.reasons,
         "supplier": supplier_result.model_dump(mode="json") if supplier_result else None,
+        "approval_id": approval_id,
     }
     return _remember(db, args.idempotency_key, "create_purchase_order", response)
 

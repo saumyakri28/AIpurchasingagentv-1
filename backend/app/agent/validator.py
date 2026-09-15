@@ -23,6 +23,7 @@ from app.tools.context import (
     serialize_po,
     storage_used,
 )
+from app.tools.errors import EntityNotFound
 
 MAX_PREVALIDATE_REVISIONS = 2
 MAX_RECONCILE_ROUNDS = 2
@@ -157,27 +158,32 @@ def collect_source_of_truth(
     cover_days: float | None = None
     constraint_report = None
     if sku and node:
-        product = product_by_sku(db, sku)
-        inv = inventory_row(db, product.id, node)
-        available = effective_available(inv.on_hand, inv.reserved, inv.damaged)
-        incoming = incoming_for(db, product.id, node)
-        forecast = forecast_units(db, product.id, node, 56)
-        cover = coverage_days(available, incoming, forecast)
-        cover_days = None if cover.coverage_days == float("inf") else cover.coverage_days
-        storage_after = storage_used(db, node)
-        budget = current_budget(db, node, product.category)
-        if budget is not None:
-            budget_remaining = budget.remaining
-        qty = ordered_qty if ordered_qty else 0
-        if supplier_id and qty:
-            action = assemble_proposed_action(
-                db,
-                sku=sku,
-                node=node,
-                supplier_id=supplier_id,
-                qty=qty,
-            )
-            constraint_report = ENGINE.evaluate(action).model_dump(mode="json")
+        try:
+            product = product_by_sku(db, sku)
+            inv = inventory_row(db, product.id, node)
+        except EntityNotFound:
+            product = None
+            inv = None
+        if inv is not None and product is not None:
+            available = effective_available(inv.on_hand, inv.reserved, inv.damaged)
+            incoming = incoming_for(db, product.id, node)
+            forecast = forecast_units(db, product.id, node, 56)
+            cover = coverage_days(available, incoming, forecast)
+            cover_days = None if cover.coverage_days == float("inf") else cover.coverage_days
+            storage_after = storage_used(db, node)
+            budget = current_budget(db, node, product.category)
+            if budget is not None:
+                budget_remaining = budget.remaining
+            qty = ordered_qty if ordered_qty else 0
+            if supplier_id and qty:
+                action = assemble_proposed_action(
+                    db,
+                    sku=sku,
+                    node=node,
+                    supplier_id=supplier_id,
+                    qty=qty,
+                )
+                constraint_report = ENGINE.evaluate(action).model_dump(mode="json")
 
     return {
         "po_id": po.id if po is not None else None,
@@ -189,6 +195,9 @@ def collect_source_of_truth(
         "storage_used_after": storage_after,
         "projected_cover_days": cover_days,
         "stockout_risk": _stockout_risk(cover_days),
+        "expected_delivery_date": (
+            po.expected_delivery_date.isoformat() if po is not None and po.expected_delivery_date else None
+        ),
         "sku": sku,
         "node": node,
         "supplier_id": supplier_id,

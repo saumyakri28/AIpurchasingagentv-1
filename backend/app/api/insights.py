@@ -13,7 +13,9 @@ from app.scenarios.insights import (
     alternate_supplier_comparison,
     po_hygiene,
     safety_stock_recommendation,
+    stock_cover_chart,
     supplier_scorecard,
+    world_summary,
 )
 from app.tools.errors import EntityNotFound
 
@@ -49,3 +51,16 @@ def safety_stock(sku: str | None = None, node: str | None = None, db: Session = 
         return safety_stock_recommendation(db, sku=sku, node=node)
     except EntityNotFound as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@router.get("/stock-cover")
+def stock_cover(sku: str, node: str, db: Session = Depends(get_db)) -> dict[str, Any]:
+    try:
+        return stock_cover_chart(db, sku=sku, node=node)
+    except EntityNotFound as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@router.get("/world")
+def world(db: Session = Depends(get_db)) -> dict[str, Any]:
+    return world_summary(db)

@@ -1,0 +1,29 @@
+id: E8
+description: Supplier confirms 250 of 500 and inventory is insufficient — source remainder from QuickShip and post-verify combined cover.
+world: supplier_shortfall
+intake:
+  scenario: supplier-shortfall
+  variant: gap
+  payload:
+    po_id: PO-SHORTFALL
+    confirmed_qty: 250
+    sku: SKU-ALT
+    node: DC-NORTH
+expected:
+  decision_class: modify
+  quantity_range: [80, 80]
+  must_call_tools:
+    - get_open_purchase_orders
+    - get_inventory
+    - compute_replenishment_plan
+    - find_alternate_suppliers
+    - validate_action
+  must_not_violate: [C7, C8, C12]
+  expected_action:
+    type: create_purchase_order
+    target: SUP-FAST
+    status: confirmed
+  must_post_verify: true
+  must_escalate_if_blocked: true
+  recovery: false
+llm: fake

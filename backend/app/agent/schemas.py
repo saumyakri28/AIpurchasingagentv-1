@@ -37,6 +37,7 @@ class ExpectedOutcome(BaseModel):
     storage_used_after: float | None = None
     projected_cover_days: float | None = None
     stockout_risk: str | None = None
+    expected_delivery_date: str | None = None
 
 
 class KeyFactor(BaseModel):

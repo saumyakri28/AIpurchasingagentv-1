@@ -137,3 +137,113 @@ def safety_stock_recommendation(
         )
     recs.sort(key=lambda r: r["on_hand_vs_ss"])
     return {"count": len(recs), "recommendations": recs}
+
+
+def stock_cover_chart(db: Session, *, sku: str, node: str) -> dict[str, Any]:
+    from datetime import timedelta
+
+    from app.domain.calculators import coverage_days, effective_available
+    from app.tools.context import inventory_row
+
+    product = product_by_sku(db, sku)
+    inv = inventory_row(db, product.id, node)
+    available = effective_available(inv.on_hand, inv.reserved, inv.damaged)
+    incoming = incoming_for(db, product.id, node)
+    forecast = forecast_units(db, product.id, node, 56)
+    cover = coverage_days(available, incoming, forecast, as_of=FROZEN_TODAY)
+    link = db.scalar(
+        select(SupplierProduct).where(
+            SupplierProduct.product_id == product.id,
+            SupplierProduct.is_primary.is_(True),
+        )
+    )
+    lead = int(link.lead_time_days) if link else 0
+    arrivals = {(r.expected_date.isoformat() if r.expected_date else FROZEN_TODAY.isoformat()): r.qty for r in incoming}
+    series = []
+    for i, stock in enumerate(cover.projected_daily_stock):
+        day = FROZEN_TODAY + timedelta(days=i)
+        key = day.isoformat()
+        series.append(
+            {
+                "date": key,
+                "stock": round(float(stock), 2),
+                "forecast": float(forecast[i]) if i < len(forecast) else 0.0,
+                "incoming": float(arrivals.get(key, 0.0)),
+            }
+        )
+    stockout = cover.projected_stockout_date.isoformat() if cover.projected_stockout_date else None
+    cover_days = None if cover.coverage_days == float("inf") else round(cover.coverage_days, 2)
+    return {
+        "sku": sku,
+        "node": node,
+        "as_of": FROZEN_TODAY.isoformat(),
+        "on_hand": inv.on_hand,
+        "available": available,
+        "coverage_days": cover_days,
+        "projected_stockout_date": stockout,
+        "lead_time_days": lead,
+        "lead_time_end": (FROZEN_TODAY + timedelta(days=lead)).isoformat(),
+        "series": series,
+    }
+
+
+def world_summary(db: Session) -> dict[str, Any]:
+    from sqlalchemy import func
+
+    from app.db.models import ApprovalRequest, Budget, EventLog, Inventory, PurchaseOrder
+
+    world_evt = db.scalar(select(EventLog).where(EventLog.event_type == "world_seeded").order_by(EventLog.ts.desc()))
+    open_pos = [
+        po
+        for po in db.scalars(select(PurchaseOrder)).all()
+        if po.status in OPEN_PO_STATUSES
+    ]
+    pending = db.scalar(
+        select(func.count()).select_from(ApprovalRequest).where(ApprovalRequest.status == "pending")
+    )
+    events = db.scalars(select(EventLog).order_by(EventLog.ts.desc()).limit(12)).all()
+    budgets = db.scalars(select(Budget)).all()
+    inv_n = db.scalar(select(func.count()).select_from(Inventory))
+    hygiene = po_hygiene(db)
+    return {
+        "world": world_evt.entity_id if world_evt else None,
+        "as_of": FROZEN_TODAY.isoformat(),
+        "inventory_positions": int(inv_n or 0),
+        "open_po_count": len(open_pos),
+        "pending_approvals": int(pending or 0),
+        "open_pos": [
+            {
+                "id": po.id,
+                "status": po.status,
+                "supplier_id": po.supplier_id,
+                "node_id": po.node_id,
+                "expected_delivery_date": po.expected_delivery_date.isoformat() if po.expected_delivery_date else None,
+                "ordered_qty": sum(line.ordered_qty for line in po.lines),
+                "confirmed_qty": sum(line.confirmed_qty for line in po.lines),
+            }
+            for po in open_pos
+        ],
+        "budgets": [
+            {
+                "id": b.id,
+                "node_id": b.node_id,
+                "category": b.category,
+                "remaining": b.remaining,
+                "allocated": b.allocated,
+                "committed": b.committed,
+            }
+            for b in budgets
+        ],
+        "hygiene": hygiene,
+        "events": [
+            {
+                "id": e.id,
+                "ts": e.ts.isoformat() if e.ts else None,
+                "event_type": e.event_type,
+                "entity_type": e.entity_type,
+                "entity_id": e.entity_id,
+                "payload": e.payload,
+            }
+            for e in events
+        ],
+    }

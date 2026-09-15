@@ -1,0 +1,22 @@
+id: E2
+description: Open PO already covers demand — reject REC-OVERBUY.
+world: recommendation_review
+intake:
+  scenario: recommendation-review
+  variant: overbuy
+  payload:
+    recommendation_id: REC-OVERBUY
+expected:
+  decision_class: reject
+  quantity_range: null
+  must_call_tools:
+    - get_recommendation
+    - get_open_purchase_orders
+    - compute_replenishment_plan
+  must_not_violate: [C8, C12]
+  expected_action:
+    type: none
+  must_post_verify: true
+  must_escalate_if_blocked: true
+  recovery: false
+llm: fake

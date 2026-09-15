@@ -1,0 +1,24 @@
+id: E4
+description: Budget insufficient — do not buy 400. suggested_max is 0 so escalate with an approval request (partial buy is not feasible).
+world: constrained_buy
+intake:
+  scenario: constrained-buy
+  variant: budget
+  payload:
+    sku: SKU-BUDGET
+    node: DC-NORTH
+expected:
+  decision_class: escalate
+  quantity_range: null
+  must_call_tools:
+    - get_budget
+    - compute_replenishment_plan
+    - validate_action
+  must_not_violate: [C1]
+  expected_action:
+    type: escalate
+    target: SKU-BUDGET
+  must_post_verify: true
+  must_escalate_if_blocked: true
+  recovery: false
+llm: fake

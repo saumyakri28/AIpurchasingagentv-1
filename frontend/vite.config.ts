@@ -16,6 +16,7 @@ export default defineConfig({
       "/evals": "http://localhost:8000",
       "/insights": "http://localhost:8000",
       "/tools": "http://localhost:8000",
+      "/openapi.json": "http://localhost:8000",
     },
   },
 });
