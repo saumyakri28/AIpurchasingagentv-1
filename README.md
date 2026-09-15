@@ -12,81 +12,139 @@ Clock is frozen at **2026-09-15**. Default `LLM_PROVIDER=fake` (canned scripts).
 
 A buyer-desk agent: given a recommendation, a supplier shortfall, a demand change, or a constrained buy, it must call tools, run `compute_replenishment_plan`, pre-validate with the constraint engine, maybe write a PO, then re-read the DB and reconcile if reality disagrees with the contract it declared.
 
-### Terminal (works even if the UI is broken)
+Evaluate this submission from the terminal. The buyer console is optional and is not required to judge the agent.
+
+### 60-second demo (no API key, no browser)
 
 From the repo root (the folder that contains `Makefile`):
 
 ```bash
-make setup && make demo
+make setup
+make seed
+make demo
 ```
 
-`make demo` seeds the Scenario 1 world into a temp SQLite file and runs the **overbuy** variant with FakeLLM. You should see a readable trace ending in `REJECT`. What to look for:
-
-- `get_recommendation` loads `REC-OVERBUY` for `SKU-COVERED` qty **800**
-- `get_open_purchase_orders` shows `PO-COVERED:confirmed:800`
-- `compute_replenishment_plan` returns `rounded_qty=0`, `incoming=800`, cover **38.4** days
-- `validate_action` **fails**; binding constraint is `total_cover_within_max_weeks_of_supply` (C12), with C8 also cited
-- `ACT` is `(no write for decision=reject)` — no new PO
-- `verdict   REJECT`
-
-Exact output shape:
+`make demo` seeds Scenario 1 into a temp SQLite file and runs the **overbuy** variant with FakeLLM. Confirm the trace contains `decision=reject` on `REC-OVERBUY` and ends `OK  agent decided 'reject'`. The `trace` id and `db` path vary; the rest is deterministic.
 
 ```
+========================================================================
+  AI Purchasing Agent — terminal demo (no UI, no API key)
+  Scenario 1  S1 Purchase Recommendation Review
+  variant     overbuy   expected reject
+  clock       2026-09-15 (frozen)
+  llm         FakeLLM canned script
+  db          <temp sqlite path>
+========================================================================
+
+Seeding world 'recommendation_review' and running the agent…
+
+trace     TR-…
+status    rejected
+
 PLAN            (Plan: load REC-OVERBUY, open POs, replenishment plan, then decide. Hypothesis only.)
 INVESTIGATE    get_recommendation
               id=REC-OVERBUY sku=SKU-COVERED qty=800 supplier=SUP-RELIABLE
 INVESTIGATE    get_open_purchase_orders
               open=1 PO-COVERED:confirmed:800
+INVESTIGATE    get_inventory
+              sku=SKU-COVERED
 INVESTIGATE    compute_replenishment_plan
               rounded_qty=0 incoming=800.0 cover_days=38.4 stockout=2026-10-23 cost=0.0
-DECIDE         decision=reject
+INVESTIGATE    validate_action
+              passed=False binding=total_cover_within_max_weeks_of_supply suggested_max=0
+DECIDE
+              decision=reject qty=None supplier=SUP-RELIABLE
+              PO-COVERED already confirms 800 units of still water arriving 2026-09-20. compute_replenishment_plan returns net requirement 0, so a second buy of 800 is redundant.
+PRE-VALIDATE    (no buy action to validate)
 ACT             (no write for decision=reject)
-POST-VERIFY     matched=True diffs=[]
+POST-VERIFY     (skipped — no buy write)
+              matched=True diffs=[]
+
 verdict   REJECT
+why       PO-COVERED already confirms 800 units of still water arriving 2026-09-20. compute_replenishment_plan returns net requirement 0, so a second buy of 800 is redundant.
+constraints  C8 no_redundant_coverage_with_open_pos: blocking, C12 total_cover_within_max_weeks_of_supply: extra 800 would exceed 8 weeks
+
+Look for: REC-OVERBUY for SKU-COVERED is rejected. PO-COVERED already confirms 800 inbound (cover 38.4 days, net requirement 0). C8/C12 bind. No new PO.
+OK  agent decided 'reject' (matches catalogue).
 ```
 
-Other S1 variants (still no UI): `cd backend && .venv/bin/python -m app.demo --variant healthy` (expect **accept** + a PO) or `--variant moq` (expect **escalate**).
+Other terminal variants: `cd backend && .venv/bin/python -m app.demo --variant healthy` (`accept` + a PO) or `--variant moq` (`escalate`).
 
-### Operator console (optional)
+### Verification
 
 ```bash
-make setup && make seed && make dev
+make test   # 154 passed
+make eval   # 13/13, mean stability 1.0
 ```
 
-1. Open [http://localhost:5173](http://localhost:5173). Header should read **api ok**. If it says **api unreachable**, stop and restart `make dev-backend` (port 8000 has hung on `/health` in this workspace before).
-2. You are on **Situations** (key `1`). Find the card `recommendation-review` / **S1 Purchase Recommendation Review**.
-3. Leave the variant dropdown on **REC-OVERBUY — reject (open PO already covers)**.
-4. Click **Run agent**. The console reseeds that world and navigates to **Run** (key `2`).
-5. Look for: a **REJECT** chip in the middle column; C8 / C12 meters in the right column; the left timeline showing `compute_replenishment_plan` then `DECIDE`.
-6. Press `3` (**Validation**). There should be **no write**, post-verify matched, no mismatch banner.
-7. Press `5` (**Purchase Orders**). `PO-COVERED` is still the inbound 800; no agent-created PO.
+Expected `make test` summary:
 
-Keys `1`–`6` switch Situations / Run / Validation / Approvals / Purchase Orders / Evaluation. Full four-scenario walkthrough: [DEMO.md](DEMO.md).
+```
+154 passed
+```
+
+Expected `make eval` header (`LLM_PROVIDER=fake`, no API key):
+
+```
+- cases passed: 13/13
+- mean stability: 1.0
+```
+
+### Optional: buyer console (UI)
+
+Not required to evaluate the submission. Full four-scenario walkthrough: [DEMO.md](DEMO.md).
+
+```bash
+make dev
+```
+
+Serves the API on [http://localhost:8000](http://localhost:8000) and the console on [http://localhost:5173](http://localhost:5173). Keys `1`–`6` switch screens. **Run agent** reseeds that scenario’s world into SQLite.
+
+- **Situations** — four scenario cards (recommendation review, supplier shortfall, demand change, constrained buy) and a variant dropdown.
+- **Run** — live trace timeline, decision panel (verdict / qty / reasoning), and constraint panel (C1–C12 meters).
+- **Validation** — pre-validate / post-verify / reconcile steps for a stored trace.
+- **Approvals** — HITL queue for envelope-parked POs (`pending_approval`).
+- **Purchase Orders** — persisted POs for the current DB.
+- **Evaluation** — grader dashboard (`POST /evals/run` under the hood).
+
+If http://localhost:8000/health does not respond, another process is bound to port 8000:
+
+```bash
+lsof -ti:8000 | xargs kill -9
+```
+
+then re-run `make dev`.
 
 ---
 
 ## 2. One-command setup
 
+Terminal path (no servers, no API key):
+
 ```bash
-make setup && make seed && make dev
+make setup
+make seed
+make demo
 ```
+
+Then `make test` and `make eval`. `make dev` starts the optional buyer console; it is not part of the evaluation path.
 
 | Command | What it does |
 | --- | --- |
 | `make setup` | Copies `.env.example` → `.env` if missing, creates `backend/.venv`, installs Python + frontend deps |
 | `make seed` | Seeds the `base` world into SQLite (`DB_URL`) |
-| `make dev` | API on [http://localhost:8000](http://localhost:8000) and console on [http://localhost:5173](http://localhost:5173) |
 | `make demo` | Seeds Scenario 1 and prints a terminal trace (no servers) |
 | `make test` | `pytest` |
 | `make eval` | `python -m evals.run --suite all --repeat 3 --llm fake` |
+| `make dev` | Optional. API on [http://localhost:8000](http://localhost:8000) and console on [http://localhost:5173](http://localhost:5173) |
 
-Or:
+Optional Docker (API + console; not required):
 
 ```bash
 docker compose up --build
 ```
 
-Compose publishes the API on `:8000` and the console on `:5173`. Seed from the UI (**Run agent** reseeds that scenario's world) or:
+Compose publishes the API on `:8000` and the console on `:5173`. Seed from the terminal instead:
 
 ```bash
 docker compose exec backend python -m app.db.seed --world base
@@ -103,7 +161,7 @@ docker compose exec backend python -m app.db.seed --world base
 | `DB_URL` | SQLite URL. Default `sqlite:///./purchasing_agent.db` (created under `backend/` when the API cwd is `backend/`). |
 | `SUPPLIER_API_MODE` | `fixture` — mock supplier behaviour comes from YAML / `api_behaviour`, never from randomness. |
 
-**The eval suite runs with `LLM_PROVIDER=fake` and needs no API key.** `make eval` passes `--llm fake` regardless of `.env`. CI and the Evaluation screen do the same.
+**The eval suite runs with `LLM_PROVIDER=fake` and needs no API key.** `make eval` passes `--llm fake` regardless of `.env`. CI does the same. The optional Evaluation screen also uses FakeLLM.
 
 ---
 
@@ -356,11 +414,11 @@ Implemented in `backend/app/domain/policy.py`. Thresholds are settings, not prom
 
 **Why these numbers.**
 
-- **$5000.** Routine replenishment stays autonomous (SKU-HEALTHY 140 × $1.25 = $175). `SKU-ENVELOPE` is the reviewer-visible gate: 100 × $55 = $5500 is constraint-clean and parks `pending_approval` with the default setting — no injected `max_order_value`. Coffee 400 × $16 is still killed by C1 before policy.
+- **$5000.** Routine replenishment stays autonomous (SKU-HEALTHY 140 × $1.25 = $175). `SKU-ENVELOPE` is the default-run gate: 100 × $55 = $5500 is constraint-clean and parks `pending_approval` with the default setting — no injected `max_order_value`. Coffee 400 × $16 is still killed by C1 before policy.
 - **0.70 reliability.** Bargain Cash & Carry is **0.41** (below); QuickShip **0.86** and Acme **0.94** (above). Auto-send money to a 52% on-time vendor is the failure mode this gate exists for. It does **not** replace C11 (warn-only on the engine).
 - **0.60 confidence.** Below that the model is guessing. Scripts in this repo sit at 0.7–0.95, so the gate is idle in FakeLLM evals and live when a real model hedges.
 
-The approval queue (`request_human_approval`, UI **Approvals**, key `4`) is for envelope misses. **Approve** re-enters the loop: submit the parked PO, then post-verify against the original contract. **Modify-and-approve** re-runs constraints at the new qty. Constraint-blocked actions never appear here.
+The approval queue (`request_human_approval`) is for envelope misses. **Approve** re-enters the loop: submit the parked PO, then post-verify against the original contract. **Modify-and-approve** re-runs constraints at the new qty. Constraint-blocked actions never enter the queue. The optional Approvals screen renders this queue.
 
 ---
 
@@ -418,18 +476,18 @@ make eval
 # or: cd backend && .venv/bin/python -m evals.run --suite all --repeat 3 --llm fake
 ```
 
-Dashboard: console key `6`, or `POST /evals/run`.
+The same run is available as `POST /evals/run`. The optional Evaluation screen renders that report.
 
 ### What the agent gets wrong / known limitations
 
 - **FakeLLM stability 1.0 is not real-LLM stability.** E1–E13 pass because each case has a canned tool script. That measures the loop, the engine, and the grader — not Claude. A live `LLM_PROVIDER=anthropic` run is a different product.
 - **Budget cannot partial-buy.** E4/`SKU-BUDGET`: remaining $600, MOQ 50 × $16 = $800, `suggested_max_feasible_qty=0`. Escalating is correct for this fixture. A better agent would still quantify stockout cost vs a budget-exception request; this one has no objective function, so it escalates rather than inventing a 37-unit (illegal) slice.
-- **Two scripts, one world.** UI default for S3 `SKU-SPIKE` is `investigate_further` (stale forecast, do not guess a qty). Eval E9 uses a different script that `modify`s to 240. Likewise S2 `covered` in the console reseeds `supplier_shortfall` (on-hand 70) but FakeLLM still runs the accept-the-short script; the numbers that make that *correct* are the E7 overlay (`supplier_shortfall_covered`, on-hand 2000). A live model has to pick; the harness does not claim both are the same policy.
+- **Two scripts, one world.** FakeLLM’s S3 `SKU-SPIKE` default is `investigate_further` (stale forecast, do not guess a qty). Eval E9 uses a different script that `modify`s to 240. Likewise S2 `covered` reseeds `supplier_shortfall` (on-hand 70) but FakeLLM still runs the accept-the-short script; the numbers that make that *correct* are the E7 overlay (`supplier_shortfall_covered`, on-hand 2000). A live model has to pick; the harness does not claim both are the same policy.
 - **`stockout_risk` is a brittle contract field on writes.** Cover near 20 days is easy to call `low` vs `medium`. Write scripts usually **omit** it. Reject / investigate_further **skip** post-verify entirely (no noisy mismatch on a correct reject). Buy writes must declare `po_status`, `ordered_qty`, and `committed_cost` or post-verify fails with `incomplete_expected_outcome`.
 - **Accept-the-short is easy to implement wrong.** An `accept` with `final_quantity=null` must **not** write and must **not** escalate. Early loop versions treated “accept without a qty” as an error. E7 depends on that being a no-op.
 - **No forecast model.** Forward demand is a fixture series plus rolling mean/std. The agent can notice a stale forecast (`spike_detected`); it cannot produce a statistically revised one.
 - **Single-node decisions.** It will not allocate a buy across DC-NORTH and DC-SOUTH.
-- **Live API hang.** `:8000` has stopped answering `/health` under `--reload` in this workspace. The terminal demo does not use the API. For the UI, restart `make dev-backend`.
+- **Optional console vs port 8000.** The terminal demo, tests, and evals do not use the live API. If `make dev` is running and `/health` times out, free port 8000 (`lsof -ti:8000 | xargs kill -9`) and re-run `make dev`.
 - **C11 is WARN.** Unreliable suppliers are an autonomy/policy issue, not a hard engine refuse, unless you also fail C6.
 
 ---
